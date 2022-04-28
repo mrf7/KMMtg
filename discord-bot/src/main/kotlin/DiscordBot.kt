@@ -1,5 +1,8 @@
+import com.mfriend.platform.client.ScryfallApiImpl
 import com.mfriend.platform.getPlatform
+import java.net.http.HttpClient
 
-fun main() {
-    println(getPlatform())
+suspend fun main() {
+    val client = ScryfallApiImpl()
+    println(client.searchCard("C"))
 }

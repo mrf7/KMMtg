@@ -19,12 +19,14 @@ dependencyResolutionManagement {
             // Web stuff
             version("ktor", "2.0.0")
             library("ktor-client-core", "io.ktor","ktor-client-core").versionRef("ktor")
-            library("ktor-client-jvm", "io.ktor","ktor-client-jvm").versionRef("ktor")
+            library("ktor-client-jvm", "io.ktor","ktor-client-cio").versionRef("ktor")
             library("ktor-client-okhttp", "io.ktor","ktor-client-okhttp").versionRef("ktor")
             library("ktor-client-ios", "io.ktor","ktor-client-ios").versionRef("ktor")
             library("ktor-client-js", "io.ktor","ktor-client-js").versionRef("ktor")
-            library("kotlinx-serialization", kotlinx, "kotlinx-serialization-json").version("1.3.2")
-            bundle("web", listOf("ktor-client-core", "kotlinx-serialization"))
+            library("ktor-kotlinx-serialization", "io.ktor", "ktor-serialization-kotlinx-json").versionRef("ktor")
+            library("ktor-content-negotiation", "io.ktor","ktor-client-content-negotiation" ).versionRef("ktor")
+
+            bundle("web", listOf("ktor-client-core", "ktor-kotlinx-serialization", "ktor-content-negotiation"))
 
             //database
             version("sqlDelight", "1.5.3")
