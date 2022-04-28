@@ -15,33 +15,30 @@ kotlin {
         browser()
     }
     sourceSets {
-        val ktorVersion = "2.0.0"
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
-                implementation("co.touchlab:kermit:1.0.0")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+                implementation(libs.bundles.base)
+                implementation(libs.bundles.web)
             }
         }
         val jvmMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-jvm:$ktorVersion")
+                implementation(libs.ktor.client.jvm)
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation(libs.ktor.client.okhttp)
             }
         }
         val jsMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-js:$ktorVersion")
+                implementation(libs.ktor.client.js)
             }
         }
         val iosMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-ios:$ktorVersion")
+                implementation(libs.ktor.client.ios)
             }
         }
     }

@@ -15,27 +15,24 @@ kotlin {
     android()
     sourceSets {
         /* Main source sets */
-        val sqlDelightVersion = "1.5.3"
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
-                implementation("co.touchlab:kermit:1.0.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+                implementation(libs.bundles.base)
             }
         }
         val jvmMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:sqlite-driver:$sqlDelightVersion")
+                implementation(libs.sqldelight.driver.jvm)
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
+                implementation(libs.sqldelight.driver.android)
             }
         }
         val iosMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
+                implementation(libs.sqldelight.driver.native)
             }
         }
 
