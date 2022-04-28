@@ -4,5 +4,5 @@ import java.net.http.HttpClient
 
 suspend fun main() {
     val client = ScryfallApiImpl()
-    println(client.searchCard("C"))
+    println(client.searchCard("Chatterfang"))
 }

@@ -11,7 +11,7 @@ kotlin {
     jvm()
     ios()
     android()
-    js {
+    js(IR) {
         browser()
     }
     sourceSets {
