@@ -1,5 +1,6 @@
-package com.mfriend.platform.client
+package client
 
+import client.defaultJson
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json

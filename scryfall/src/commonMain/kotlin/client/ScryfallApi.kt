@@ -1,6 +1,6 @@
-package com.mfriend.platform.client
+package client
 
-import com.mfriend.platform.models.Card
+import models.Card
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get

@@ -1,6 +1,4 @@
-import com.mfriend.platform.client.ScryfallApiImpl
-import com.mfriend.platform.getPlatform
-import java.net.http.HttpClient
+import client.ScryfallApiImpl
 
 suspend fun main() {
     val client = ScryfallApiImpl()

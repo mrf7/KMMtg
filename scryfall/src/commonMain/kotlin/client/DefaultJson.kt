@@ -1,4 +1,4 @@
-package com.mfriend.platform.client
+package client
 
 import kotlinx.serialization.json.Json
 

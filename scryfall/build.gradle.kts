@@ -41,6 +41,9 @@ kotlin {
                 implementation(libs.ktor.client.ios)
             }
         }
+        all {
+            languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+        }
     }
 }
 
