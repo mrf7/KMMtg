@@ -2,12 +2,14 @@ rootProject.name = "KMMtg"
 include(":carddb")
 include("scryfall")
 include("discord-bot")
+include(":collection-import")
 
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             val touchlab = "co.touchlab"
             val kotlinx = "org.jetbrains.kotlinx"
+            val square = "com.squareup.sqldelight"
             // base stuff
             version("kermit", "1.0.0")
             library("kermit", touchlab, "kermit").versionRef("kermit")
@@ -30,10 +32,10 @@ dependencyResolutionManagement {
 
             //database
             version("sqlDelight", "1.5.3")
-            library("sqldelight-driver-jvm","com.squareup.sqldelight", "sqlite-driver").versionRef("sqlDelight")
-            library("sqldelight-driver-android","com.squareup.sqldelight", "android-driver").versionRef("sqlDelight")
-            library("sqldelight-driver-native","com.squareup.sqldelight", "native-driver").versionRef("sqlDelight")
-            library("sqldelight-coroutines","com.squareup.sqldelight", "coroutines-extensions").versionRef("sqlDelight")
+            library("sqldelight-driver-jvm",square, "sqlite-driver").versionRef("sqlDelight")
+            library("sqldelight-driver-android",square, "android-driver").versionRef("sqlDelight")
+            library("sqldelight-driver-native",square, "native-driver").versionRef("sqlDelight")
+            library("sqldelight-coroutines",square, "coroutines-extensions").versionRef("sqlDelight")
 
         }
     }
