@@ -1,37 +1,50 @@
 package client
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import models.Card
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
 
 interface ScryfallApi {
-    suspend fun cardNamed(name: String): Card
-    suspend fun searchCard(searchParam: String): List<Card>
+    suspend fun cardNamed(name: String): Either<String, Card>
+    suspend fun searchCard(searchParam: String): Either<String, List<Card>>
 }
+
+suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> =
+    when (this.status.value) {
+        in 200..299 -> this.body<T>().right()
+        else -> this.body<String>().left()
+    }
 
 class ScryfallApiImpl : ScryfallApi {
     private val client = newKtorClient()
-    override suspend fun cardNamed(name: String): Card {
+    override suspend fun cardNamed(name: String): Either<String, Card> {
         val response = client.get {
             scryfall("$CardApiBase$FindNamed")
             parameter("fuzzy", name)
         }
-        return response.body()
+
+        return response.toEither()
     }
 
-    override suspend fun searchCard(searchParam: String): List<Card> {
-        val resp = client.get {
+    override suspend fun searchCard(searchParam: String): Either<String, List<Card>> {
+        val resp: HttpResponse = client.get {
             scryfall("$CardApiBase$Search")
             parameter("q", searchParam)
-        }.also { println(it.body<String>()) }
+        }
 
-        return resp.body<JsonObject>()["data"].let { defaultJson.decodeFromJsonElement(it!!)}
+        return resp
+            .toEither<JsonObject>()
+            .map { jsonObject -> jsonObject["data"].let { defaultJson.decodeFromJsonElement(it!!) } }
     }
 
     companion object {

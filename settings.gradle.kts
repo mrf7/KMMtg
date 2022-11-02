@@ -16,7 +16,9 @@ dependencyResolutionManagement {
 
             version("coroutines", "1.6.1-native-mt")
             library("coroutines-core", kotlinx, "kotlinx-coroutines-core").versionRef("coroutines")
-            bundle("base", listOf("kermit","coroutines-core"))
+
+            library("arrow", "io.arrow-kt:arrow-core:1.1.2")
+            bundle("base", listOf("kermit","coroutines-core", "arrow"))
 
             // Web stuff
             version("ktor", "2.0.0")
@@ -27,8 +29,9 @@ dependencyResolutionManagement {
             library("ktor-client-js", "io.ktor","ktor-client-js").versionRef("ktor")
             library("ktor-kotlinx-serialization", "io.ktor", "ktor-serialization-kotlinx-json").versionRef("ktor")
             library("ktor-content-negotiation", "io.ktor","ktor-client-content-negotiation" ).versionRef("ktor")
+            library("ktor-logging","io.ktor", "ktor-client-logging").versionRef("ktor")
 
-            bundle("web", listOf("ktor-client-core", "ktor-kotlinx-serialization", "ktor-content-negotiation"))
+            bundle("web", listOf("ktor-client-core", "ktor-kotlinx-serialization", "ktor-content-negotiation", "ktor-logging"))
 
             //database
             version("sqlDelight", "1.5.3")
