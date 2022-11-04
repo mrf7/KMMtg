@@ -4,27 +4,33 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
-@JsExport
 @Serializable
 data class Card(
+    val name: String,
+    @SerialName("oracle_text")
+    val oracleText: String,
+    val set: String,
+    @SerialName("set_name")
+    val setName: String,
     val id: String,
     @SerialName("scryfall_uri")
-    val scryfallUrl: String,
+    val scryfallUrl: Uri,
     @SerialName("uri")
-    val apiUri: String,
+    val apiUri: Uri,
     @SerialName("image_uris")
     val imageUris: ImageUris? = null,
+    @SerialName("purchase_uris")
+    val purchaseUris: PurchaseUris,
 )
 
-@JsExport
 @Serializable
 data class ImageUris(
-    val small: String,
-    val normal: String,
-    val large: String,
-    val png: String,
+    val small: Uri,
+    val normal: Uri,
+    val large: Uri,
+    val png: Uri,
     @SerialName("art_crop")
-    val artCrop: String,
+    val artCrop: Uri,
     @SerialName("border_crop")
-    val borderCrop: String,
+    val borderCrop: Uri,
 )
