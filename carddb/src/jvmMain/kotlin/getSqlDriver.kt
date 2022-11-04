@@ -3,5 +3,7 @@ import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 
 actual fun getSqlDriver(): SqlDriver {
-   return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+   val driver =  JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+   MTGDb.Schema.create(driver)
+   return driver
 }

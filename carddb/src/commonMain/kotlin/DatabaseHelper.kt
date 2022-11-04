@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 expect fun getSqlDriver(): SqlDriver
 
 class DatabaseHelper() {
-    val database = MTGDb(getSqlDriver())
+    private val database = MTGDb(getSqlDriver())
     suspend fun insertCard(card: Card) {
         database.cardQueries.insertCard(card)
     }
