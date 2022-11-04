@@ -18,6 +18,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.bundles.base)
+                implementation(libs.sqldelight.coroutines)
             }
         }
         val jvmMain by getting {
