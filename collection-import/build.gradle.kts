@@ -11,9 +11,6 @@ kotlin {
     jvm()
     ios()
     android()
-    js(IR) {
-        browser()
-    }
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -27,10 +24,6 @@ kotlin {
             }
         }
         val androidMain by getting {
-            dependencies {
-            }
-        }
-        val jsMain by getting {
             dependencies {
             }
         }
