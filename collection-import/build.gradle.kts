@@ -20,7 +20,7 @@ kotlin {
            }
        }
        browser()
-       binaries.executable()
+       binaries.library()
    }
 
     sourceSets {

@@ -11,6 +11,7 @@ fun main() {
     println(Foo("bozo"))
 }
 
+@JsExport
 data class Foo(
     val configs: String?,
 )
