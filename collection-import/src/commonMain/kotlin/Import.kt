@@ -12,15 +12,5 @@ fun main() {
 }
 
 data class Foo(
-    override val configs: String?,
-) : IFoo{
-    override fun bingBong() {
-
-    }
-}
-
-@JsExport
-interface IFoo {
-    val configs: String?
-    fun bingBong()
-}
+    val configs: String?,
+)

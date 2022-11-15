@@ -12,7 +12,14 @@ kotlin {
     ios()
 //    android()
    js(IR) {
-       nodejs()
+       browser {
+           testTask {
+               useMocha {
+                   timeout = "10s"
+               }
+           }
+       }
+       browser()
        binaries.executable()
    }
 
