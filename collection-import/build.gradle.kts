@@ -10,23 +10,28 @@ version = "1.0-SNAPSHOT"
 kotlin {
     jvm()
     ios()
-    android()
+//    android()
+   js(IR) {
+       nodejs()
+       binaries.executable()
+   }
+
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":carddb"))
-                implementation(project(":scryfall"))
-                implementation(libs.bundles.base)
+//                implementation(project(":carddb"))
+//                implementation(project(":scryfall"))
+//                implementation(libs.bundles.base)
             }
         }
         val jvmMain by getting {
             dependencies {
             }
         }
-        val androidMain by getting {
-            dependencies {
-            }
-        }
+//        val androidMain by getting {
+//            dependencies {
+//            }
+//        }
         val iosMain by getting {
             dependencies {
             }
