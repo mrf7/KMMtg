@@ -5,12 +5,17 @@ import com.squareup.sqldelight.runtime.coroutines.mapToList
 import commfrienddb.Card
 import kotlinx.coroutines.flow.Flow
 
-class DatabaseHelper(sqlDriver: SqlDriver) {
+interface DatabaseHelper {
+    suspend fun insertCard(card: Card)
+    fun getCards(): Flow<List<Card>>
+}
+
+class DatabaseHelperImpl(sqlDriver: SqlDriver) : DatabaseHelper {
     private val database = MTGDb(sqlDriver)
-    suspend fun insertCard(card: Card) {
+    override suspend fun insertCard(card: Card) {
         database.cardQueries.insertCard(card)
     }
-    fun getCards(): Flow<List<Card>> {
+    override fun getCards(): Flow<List<Card>> {
         return database.cardQueries.selectAll().asFlow().mapToList()
     }
 }

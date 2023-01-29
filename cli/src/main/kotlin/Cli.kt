@@ -1,14 +1,15 @@
 import arrow.core.Either
 import client.ScryfallApi
-import client.ScryfallApiImpl
 import commfrienddb.Card
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.core.KoinApplication
+import org.koin.core.context.GlobalContext.startKoin
 
 suspend fun main() = coroutineScope {
-    val client = ScryfallApiImpl()
-    val databaseHelper = DatabaseHelper(TODO())
+    val koin = initKoin().koin
+    val client:ScryfallApi = koin.get()
+    val databaseHelper:DatabaseHelper = koin.get()
     launch {
         databaseHelper.getCards().collect {
             println(it)
@@ -50,4 +51,8 @@ suspend fun searchCard(client: ScryfallApi): Either<String, Card> {
             selection.prices.usd.toDouble()
         )
     }
+}
+
+fun initKoin(): KoinApplication = startKoin {
+    modules(databaseModule, scryfallModule)
 }
