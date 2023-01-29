@@ -1,0 +1,19 @@
+CREATE TABLE Card (
+    name TEXT NOT NULL,
+    set_code TEXT NOT NULL,
+    set_name TEXT NOT NULL,
+    image_url TEXT,
+    scryfall_url TEXT NOT NULL,
+    price REAL AS Double
+);
+
+selectAll:
+SELECT * FROM Card;
+
+insert:
+INSERT INTO Card(name,set_code,set_name,image_url,scryfall_url,price)
+VALUES (?,?,?,?,?,?);
+
+insertCard:
+INSERT INTO Card(name,set_code,set_name,image_url,scryfall_url,price)
+VALUES ?;

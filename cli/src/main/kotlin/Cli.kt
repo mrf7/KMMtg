@@ -1,16 +1,53 @@
+import arrow.core.Either
+import client.ScryfallApi
 import client.ScryfallApiImpl
+import commfrienddb.Card
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-suspend fun main() {
+suspend fun main() = coroutineScope {
     val client = ScryfallApiImpl()
+    val databaseHelper = DatabaseHelper()
+    launch {
+        databaseHelper.getCards().collect {
+            println(it)
+            println()
+        }
+    }
     while (true) {
-        println("1) Card Named\n2) Search String\n3) Exit\n")
+        println("1) Add Card Named\n2) Add Card By Search String\n3) Exit\n")
         val selection = readln().toInt()
         println("input: ")
-        val result = when(selection) {
-            1 -> client.cardNamed(readln())
-            2 -> client.searchCard(readln())
-            else -> return
+        val result = when (selection) {
+            1 -> getCardNamed(client)
+            2 -> searchCard(client)
+            else -> break
         }
         println(result)
+        result.map { databaseHelper.insertCard(it) }
+    }
+}
+
+suspend fun getCardNamed(client: ScryfallApi): Either<String, Card> {
+    return client.cardNamed(readln()).map {
+        Card(it.name, it.set, it.setName, it.imageUris?.large?.url, it.scryfallUrl.url, it.prices.usd.toDouble())
+    }
+}
+
+suspend fun searchCard(client: ScryfallApi): Either<String, Card> {
+    return client.searchCard(readln()).map {
+        it.forEachIndexed { i, card ->
+            println("$i) $card")
+        }
+        val selection = it[readln().toInt()]
+        Card(
+            selection.name,
+            selection.set,
+            selection.setName,
+            selection.imageUris?.large?.url,
+            selection.scryfallUrl.url,
+            selection.prices.usd.toDouble()
+        )
     }
 }

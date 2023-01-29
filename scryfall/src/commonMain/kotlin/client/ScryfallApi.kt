@@ -3,7 +3,7 @@ package client
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import models.Card
+import models.CardDto
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
@@ -15,8 +15,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
 
 interface ScryfallApi {
-    suspend fun cardNamed(name: String): Either<String, Card>
-    suspend fun searchCard(searchParam: String): Either<String, List<Card>>
+    suspend fun cardNamed(name: String): Either<String, CardDto>
+    suspend fun searchCard(searchParam: String): Either<String, List<CardDto>>
 }
 
 suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> =
@@ -27,7 +27,7 @@ suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> =
 
 class ScryfallApiImpl : ScryfallApi {
     private val client = newKtorClient()
-    override suspend fun cardNamed(name: String): Either<String, Card> {
+    override suspend fun cardNamed(name: String): Either<String, CardDto> {
         val response = client.get {
             scryfall("$CardApiBase$FindNamed")
             parameter("fuzzy", name)
@@ -36,7 +36,7 @@ class ScryfallApiImpl : ScryfallApi {
         return response.toEither()
     }
 
-    override suspend fun searchCard(searchParam: String): Either<String, List<Card>> {
+    override suspend fun searchCard(searchParam: String): Either<String, List<CardDto>> {
         val resp: HttpResponse = client.get {
             scryfall("$CardApiBase$Search")
             parameter("q", searchParam)

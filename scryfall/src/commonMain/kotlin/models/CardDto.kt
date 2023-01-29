@@ -2,10 +2,9 @@ package models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
 @Serializable
-data class Card(
+data class CardDto(
     val name: String,
     @SerialName("oracle_text")
     val oracleText: String,
@@ -21,6 +20,12 @@ data class Card(
     val imageUris: ImageUris? = null,
     @SerialName("purchase_uris")
     val purchaseUris: PurchaseUris,
+    val prices: Prices,
+)
+
+@Serializable
+data class Prices(
+    val usd: String
 )
 
 @Serializable

@@ -19,6 +19,10 @@ dependencyResolutionManagement {
             library("coroutines-core", kotlinx, "kotlinx-coroutines-core").versionRef("coroutines")
 
             library("arrow", "io.arrow-kt:arrow-core:1.1.2")
+
+            version("koin", "3.2.2")
+            library("koin", "io.insert-koin","koin-core").versionRef("koin")
+            library("koin", "io.insert-koin","koin-test").versionRef("koin")
             bundle("base", listOf("kermit","coroutines-core", "arrow"))
 
             // Web stuff
