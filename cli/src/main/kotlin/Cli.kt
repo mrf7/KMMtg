@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 suspend fun main() = coroutineScope {
     val client = ScryfallApiImpl()
-    val databaseHelper = DatabaseHelper()
+    val databaseHelper = DatabaseHelper(TODO())
     launch {
         databaseHelper.getCards().collect {
             println(it)

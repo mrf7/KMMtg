@@ -22,8 +22,8 @@ dependencyResolutionManagement {
 
             version("koin", "3.2.2")
             library("koin", "io.insert-koin","koin-core").versionRef("koin")
-            library("koin", "io.insert-koin","koin-test").versionRef("koin")
-            bundle("base", listOf("kermit","coroutines-core", "arrow"))
+            library("koin-test", "io.insert-koin","koin-test").versionRef("koin")
+            bundle("base", listOf("kermit","coroutines-core", "arrow", "koin"))
 
             // Web stuff
             version("ktor", "2.0.0")
