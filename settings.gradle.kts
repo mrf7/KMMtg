@@ -15,7 +15,7 @@ dependencyResolutionManagement {
             version("kermit", "1.0.0")
             library("kermit", touchlab, "kermit").versionRef("kermit")
 
-            version("coroutines", "1.6.1-native-mt")
+            version("coroutines", "1.6.4")
             library("coroutines-core", kotlinx, "kotlinx-coroutines-core").versionRef("coroutines")
 
             library("arrow", "io.arrow-kt:arrow-core:1.1.2")
