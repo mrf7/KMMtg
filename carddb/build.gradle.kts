@@ -12,7 +12,7 @@ kotlin {
 
     jvm()
     ios()
-    android()
+//    android()
     sourceSets {
         /* Main source sets */
         val commonMain by getting {
@@ -26,11 +26,11 @@ kotlin {
                 implementation(libs.sqldelight.driver.jvm)
             }
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.driver.android)
-            }
-        }
+//        val androidMain by getting {
+//            dependencies {
+//                implementation(libs.sqldelight.driver.android)
+//            }
+//        }
         val iosMain by getting {
             dependencies {
                 implementation(libs.sqldelight.driver.native)

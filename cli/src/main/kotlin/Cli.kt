@@ -8,7 +8,7 @@ import org.koin.core.context.GlobalContext.startKoin
 
 suspend fun main() = coroutineScope {
     val koin = initKoin().koin
-    val client:ScryfallApi = koin.get()
+    val client: ScryfallApi = koin.get()
     val databaseHelper:DatabaseHelper = koin.get()
     launch {
         databaseHelper.getCards().collect {
@@ -54,5 +54,5 @@ suspend fun searchCard(client: ScryfallApi): Either<String, Card> {
 }
 
 fun initKoin(): KoinApplication = startKoin {
-    modules(databaseModule, scryfallModule)
+    modules(scryfallModule, databaseModule)
 }
