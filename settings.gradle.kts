@@ -12,7 +12,7 @@ dependencyResolutionManagement {
             val kotlinx = "org.jetbrains.kotlinx"
             val square = "com.squareup.sqldelight"
             // base stuff
-            version("kermit", "1.0.0")
+            version("kermit", "1.2.2")
             library("kermit", touchlab, "kermit").versionRef("kermit")
 
             version("coroutines", "1.6.4")
@@ -20,7 +20,7 @@ dependencyResolutionManagement {
 
             library("arrow", "io.arrow-kt:arrow-core:1.1.2")
 
-            version("koin", "3.2.2")
+            version("koin", "3.3.3")
             library("koin", "io.insert-koin","koin-core").versionRef("koin")
             library("koin-test", "io.insert-koin","koin-test").versionRef("koin")
             bundle("base", listOf("kermit","coroutines-core", "arrow", "koin"))

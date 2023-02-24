@@ -1,7 +1,7 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("com.android.library")
+//    id("com.android.library")
     id("com.squareup.sqldelight")
 }
 
@@ -12,7 +12,6 @@ kotlin {
 
     jvm()
     ios()
-//    android()
     sourceSets {
         /* Main source sets */
         val commonMain by getting {
@@ -26,11 +25,7 @@ kotlin {
                 implementation(libs.sqldelight.driver.jvm)
             }
         }
-//        val androidMain by getting {
-//            dependencies {
-//                implementation(libs.sqldelight.driver.android)
-//            }
-//        }
+
         val iosMain by getting {
             dependencies {
                 implementation(libs.sqldelight.driver.native)
@@ -55,10 +50,10 @@ sqldelight {
         packageName = "com.mfriend.db"
     }
 }
-android {
-    compileSdk = 30
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 21
-    }
-}
+//android {
+//    compileSdk = 30
+//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//    defaultConfig {
+//        minSdk = 21
+//    }
+//}
