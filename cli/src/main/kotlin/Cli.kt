@@ -11,7 +11,7 @@ suspend fun main() = coroutineScope {
     val client: ScryfallApi = koin.get()
     val databaseHelper:DatabaseHelper = koin.get()
     launch {
-        databaseHelper.getCards().collect {
+        databaseHelper.getCardsFlow().collect {
             println(it)
             println()
         }
@@ -25,7 +25,6 @@ suspend fun main() = coroutineScope {
             2 -> searchCard(client)
             else -> break
         }
-        println(result)
         result.map { databaseHelper.insertCard(it) }
     }
 }
@@ -38,6 +37,17 @@ suspend fun getCardNamed(client: ScryfallApi): Either<String, Card> {
 
 suspend fun searchCard(client: ScryfallApi): Either<String, Card> {
     return client.searchCard(readln()).map {
+        it.singleOrNull()?.let { selection ->
+            return@map Card(
+                selection.name,
+                selection.set,
+                selection.setName,
+                selection.imageUris?.large?.url,
+                selection.scryfallUrl.url,
+                selection.prices.usd.toDouble()
+            )
+        }
+
         it.forEachIndexed { i, card ->
             println("$i) $card")
         }

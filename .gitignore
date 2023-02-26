@@ -85,3 +85,6 @@ fabric.properties
 */build/
 /build
 /kotlin-js-store/
+/default.realm
+/default.realm.lock
+/default.realm.management/

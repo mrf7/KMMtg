@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val databaseModule = module {
     includes(platformModule)
-    singleOf(::DatabaseHelperImpl) { bind<DatabaseHelper>() }
+    singleOf(::RealmDatabase) { bind<DatabaseHelper>() }
 }
 internal expect val platformModule: Module
