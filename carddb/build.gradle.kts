@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.serialization")
 //    id("com.android.library")
     id("com.squareup.sqldelight")
+    id("io.realm.kotlin") version "1.6.0"
 }
 
 kotlin {
@@ -18,6 +19,7 @@ kotlin {
             dependencies {
                 implementation(libs.bundles.base)
                 implementation(libs.sqldelight.coroutines)
+                implementation("io.realm.kotlin:library-base:1.6.0")
             }
         }
         val jvmMain by getting {
