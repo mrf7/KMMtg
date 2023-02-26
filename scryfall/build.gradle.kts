@@ -1,6 +1,6 @@
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
+//    id("com.android.library") TODO This breaks for some reason
     kotlin("plugin.serialization")
 }
 
@@ -10,7 +10,7 @@ version = "1.0-SNAPSHOT"
 kotlin {
     jvm()
     ios()
-    android()
+//    android()
     js(IR) {
         browser()
     }
@@ -26,11 +26,11 @@ kotlin {
                 implementation(libs.ktor.client.jvm)
             }
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
-        }
+//        val androidMain by getting {
+//            dependencies {
+//                implementation(libs.ktor.client.okhttp)
+//            }
+//        }
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
@@ -47,10 +47,10 @@ kotlin {
     }
 }
 
-android {
-    compileSdk = 30
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 21
-    }
-}
+//android {
+//    compileSdk = 30
+//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//    defaultConfig {
+//        minSdk = 21
+//    }
+//}
