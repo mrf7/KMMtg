@@ -1,6 +1,5 @@
 import client.ScryfallApi
 import client.ScryfallApiImpl
-import commfrienddb.Card
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

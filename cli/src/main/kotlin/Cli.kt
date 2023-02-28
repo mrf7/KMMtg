@@ -1,6 +1,6 @@
 import arrow.core.Either
 import client.ScryfallApi
-import commfrienddb.Card
+import com.mfriend.db.Card
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication

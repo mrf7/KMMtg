@@ -1,8 +1,8 @@
+import com.mfriend.db.Card
 import com.mfriend.db.MTGDb
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import commfrienddb.Card
 import kotlinx.coroutines.flow.Flow
 
 interface DatabaseHelper {
