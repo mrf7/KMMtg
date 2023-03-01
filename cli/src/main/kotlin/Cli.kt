@@ -1,22 +1,22 @@
 import androidx.compose.runtime.*
-import arrow.core.Either
 import client.ScryfallApi
 import com.jakewharton.mosaic.Color
 import com.jakewharton.mosaic.Column
 import com.jakewharton.mosaic.Text
 import com.jakewharton.mosaic.runMosaic
 import com.mfriend.db.Card
+import com.mfriend.db.DatabaseHelper
+import com.mfriend.db.databaseModule
 import kotlinx.coroutines.*
-import org.jline.terminal.Terminal
-import org.jline.terminal.TerminalBuilder
 import org.koin.core.KoinApplication
 import org.koin.core.context.GlobalContext.startKoin
 import kotlin.system.exitProcess
 
 enum class Action(val text: String) {
-    Named("Add for card Named"), Search("Add Card By Search"), Parse("Translate CardCastle file"), ViewCollection("View Collection"), Exit(
-        "Exit"
-    )
+    Search("Add Card By Search"),
+    Parse("Translate CardCastle file"),
+    ViewCollection("View Collection"),
+    Exit("Exit")
 }
 
 
@@ -32,9 +32,8 @@ suspend fun main() = runMosaic {
         } else {
             when (activeAction) {
                 Action.Search -> SearchCardAction(api, db) { activeAction = null }
-                Action.Named -> TODO()
-                Action.Parse -> TODO()
-                Action.ViewCollection -> Collection(db)
+                Action.Parse -> Parse { activeAction = null }
+                Action.ViewCollection -> Collection(db) { activeAction = null }
                 Action.Exit -> exitProcess(0)
                 null -> TODO()
             }
@@ -48,7 +47,16 @@ suspend fun main() = runMosaic {
 }
 
 @Composable
-fun Collection(database: DatabaseHelper) {
+fun Parse(onComplete: Event) {
+    var input by mutableStateOf("")
+    Text("Filepath: $input")
+    TrackInput({ input = it }) {
+        onComplete()
+    }
+}
+
+@Composable
+fun Collection(database: DatabaseHelper, onComplete: Event) {
     val cards by database.getCards().collectAsState(emptyList())
     Column {
         Text("Your Collection")
@@ -56,42 +64,24 @@ fun Collection(database: DatabaseHelper) {
             Text(card.toString())
         }
     }
+    TrackKeys('b' to onComplete, onBackspace = onComplete)
 }
 
 @Composable
 fun ActionSelection(onSelect: (Action) -> Unit) {
-    var selection by mutableStateOf(Action.Named.ordinal)
+    var selection by mutableStateOf(0)
     Column {
         for (action in Action.values()) {
             Text(action.text, background = Color.White.takeIf { selection == action.ordinal })
         }
     }
-    LaunchedEffect(true) {
-        withContext(Dispatchers.IO) {
-            val terminal: Terminal = TerminalBuilder.terminal()
-            terminal.enterRawMode()
-            val reader = terminal.reader()
-            while (isActive) {
-                when (reader.read()) {
-                    'q'.code -> break
-                    27 -> {
-                        when (reader.read()) {
-                            91 -> {
-                                when (reader.read()) {
-                                    // Up arrow
-                                    65 -> selection = (selection - 1).coerceAtLeast(0)
-                                    // Down arrow
-                                    66 -> selection = (selection + 1).coerceAtMost(Action.values().size - 1)
-                                }
-                            }
-                        }
-                    }
-                    // Enter
-                    13 -> onSelect(Action.values()[selection])
-                }
-            }
-        }
-    }
+    TrackKeys(
+        'q' to { exitProcess(0) },
+        upArrow = { selection = (selection - 1).coerceAtLeast(0) },
+        downArrow = { selection = (selection + 1).coerceAtMost(Action.values().size - 1) },
+        onEnter = { onSelect(Action.values()[selection]) },
+        onSpace = { onSelect(Action.values()[selection]) }
+    )
 }
 
 @Composable
@@ -100,41 +90,22 @@ fun SearchCardAction(api: ScryfallApi, database: DatabaseHelper, onComplete: () 
     Column {
         Text(line)
     }
-    LaunchedEffect(true) {
-        withContext(Dispatchers.IO) {
-            val terminal: Terminal = TerminalBuilder.terminal()
-            terminal.enterRawMode()
-            val reader = terminal.reader()
-            while (isActive) {
-                when (val key = reader.read()) {
-                    in 'A'.code..'z'.code -> {
-                        line += key.toChar()
-                    }
-
-                    13 -> {
-                        launch {
-                            api.searchCard(line.trim())
-                                .map {
-                                    val selection = it.first()
-                                    val card = Card(
-                                        selection.name,
-                                        selection.set,
-                                        selection.setName,
-                                        selection.imageUris?.large?.url,
-                                        selection.scryfallUrl.url,
-                                        selection.prices.usd.toDouble()
-                                    )
-                                    delay(500)
-                                    database.insertCard(card)
-                                    onComplete()
-                                }.mapLeft { throw Exception(it) }
-                        }
-                    }
-
-                }
-            }
-        }
-
+    TrackInput({ line = it }) { input ->
+        api.searchCard(input)
+            .map {
+                val selection = it.first()
+                val card = Card(
+                    selection.name,
+                    selection.set,
+                    selection.setName,
+                    selection.imageUris?.large?.url,
+                    selection.scryfallUrl.url,
+                    selection.prices.usd.toDouble()
+                )
+                delay(500)
+                database.insertCard(card)
+                onComplete()
+            }.mapLeft { throw Exception(it) }
     }
 }
 
