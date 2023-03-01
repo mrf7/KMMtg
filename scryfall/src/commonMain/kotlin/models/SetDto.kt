@@ -8,12 +8,6 @@ import kotlinx.serialization.Serializable
 data class SetDto(
     @SerialName("name")
     val name: String,
-//    @SerialName("block")
-//    val block: String,
-//    @SerialName("block_code")
-//    val blockCode: String,
-//    @SerialName("card_count")
-//    val cardCount: Int,
     @SerialName("code")
     val code: String,
     @SerialName("scryfall_uri")
