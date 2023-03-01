@@ -3,17 +3,16 @@ CREATE TABLE Card (
     set_code TEXT NOT NULL,
     set_name TEXT NOT NULL,
     image_url TEXT,
-    scryfall_url TEXT NOT NULL,
-    price REAL AS Double
+    scryfall_url TEXT NOT NULL
 );
 
 selectAll:
 SELECT * FROM Card;
 
 insert:
-INSERT INTO Card(name,set_code,set_name,image_url,scryfall_url,price)
-VALUES (?,?,?,?,?,?);
+INSERT INTO Card(name,set_code,set_name,image_url,scryfall_url)
+VALUES (?,?,?,?,?);
 
 insertCard:
-INSERT INTO Card(name,set_code,set_name,image_url,scryfall_url,price)
+INSERT INTO Card(name,set_code,set_name,image_url,scryfall_url)
 VALUES ?;

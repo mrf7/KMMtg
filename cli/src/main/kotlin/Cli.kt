@@ -54,7 +54,6 @@ class CliViewModel(
                     card.setName,
                     card.imageUris?.large?.url,
                     card.scryfallUrl.url,
-                    card.prices.usd?.toDouble()
                 ) to count
             }
             cardRows.forEach { (card, count) ->
@@ -75,7 +74,6 @@ class CliViewModel(
                     selection.setName,
                     selection.imageUris?.large?.url,
                     selection.scryfallUrl.url,
-                    selection.prices.usd?.toDouble()
                 )
                 delay(500)
                 database.insertCard(card)
