@@ -1,6 +1,8 @@
 import arrow.core.Either
 import client.ScryfallApi
 import com.mfriend.db.Card
+import com.mfriend.db.DatabaseHelper
+import com.mfriend.db.databaseModule
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
@@ -9,7 +11,7 @@ import org.koin.core.context.GlobalContext.startKoin
 suspend fun main() = coroutineScope {
     val koin = initKoin().koin
     val client: ScryfallApi = koin.get()
-    val databaseHelper:DatabaseHelper = koin.get()
+    val databaseHelper: DatabaseHelper = koin.get()
     launch {
         databaseHelper.getCards().collect {
             println(it)

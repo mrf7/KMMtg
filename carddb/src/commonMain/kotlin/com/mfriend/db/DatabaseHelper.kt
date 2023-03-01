@@ -1,5 +1,5 @@
-import com.mfriend.db.Card
-import com.mfriend.db.MTGDb
+package com.mfriend.db
+
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList

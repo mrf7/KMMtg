@@ -1,8 +1,5 @@
-import client.ScryfallApi
-import client.ScryfallApiImpl
+import com.mfriend.db.databaseModule
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
 import org.koin.core.context.GlobalContext.startKoin
 

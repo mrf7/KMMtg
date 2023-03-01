@@ -1,4 +1,5 @@
-import com.mfriend.db.MTGDb
+package com.mfriend.db
+
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.koin.core.module.Module

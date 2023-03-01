@@ -18,6 +18,7 @@ kotlin {
             dependencies {
                 implementation(libs.bundles.base)
                 implementation(libs.sqldelight.coroutines)
+                implementation("com.squareup.sqldelight:runtime:1.5.5")
             }
         }
         val jvmMain by getting {
