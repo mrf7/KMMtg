@@ -6,8 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CardDto(
     val name: String,
-    @SerialName("oracle_text")
-    val oracleText: String,
     val set: String,
     @SerialName("set_name")
     val setName: String,
@@ -18,14 +16,12 @@ data class CardDto(
     val apiUri: Uri,
     @SerialName("image_uris")
     val imageUris: ImageUris? = null,
-    @SerialName("purchase_uris")
-    val purchaseUris: PurchaseUris,
     val prices: Prices,
 )
 
 @Serializable
 data class Prices(
-    val usd: String
+    val usd: String?
 )
 
 @Serializable
