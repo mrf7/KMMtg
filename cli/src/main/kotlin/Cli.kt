@@ -46,7 +46,7 @@ class CliViewModel(
         val succ = either {
             val imported = importer.parseCardCastle(filePath).bind()
             val cardRows = imported.map { importCard ->
-                api.searchCard("${importCard.name} s:${importCard.set} cn:\"${importCard.number}\"").bind().first().also { println(it) } to importCard.count
+                api.searchCard("${importCard.name} s:${importCard.set} cn:\"${importCard.number}\"").bind().first() to importCard.count
             }.map { (card, count) ->
                 Card(
                     card.name,
@@ -59,7 +59,7 @@ class CliViewModel(
             cardRows.forEach { (card, count) ->
                 repeat(count) { database.insertCard(card) }
             }
-            return@either cardRows.size.also { println(it) }
+            return@either cardRows.size
         }
         succ.getOrHandle {throw Exception(it)}
     }
