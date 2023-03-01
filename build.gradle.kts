@@ -15,6 +15,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.8.0")
         classpath("com.android.tools.build:gradle:7.0.4")
         classpath("com.squareup.sqldelight:gradle-plugin:1.5.5")
+        classpath("com.jakewharton.mosaic:mosaic-gradle-plugin:0.4.0")
     }
 }
 
