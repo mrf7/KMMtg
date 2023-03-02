@@ -55,17 +55,22 @@ internal fun TrackInput(onInputUpdate: (String) -> Unit, onEnter: suspend (Strin
             val reader = terminal.reader()
             while (isActive) {
                 when (val key = reader.read()) {
-                    in 'A'.code..'z'.code -> {
+                    127 -> {
+                        line = line.dropLast(1).takeIf { it.isNotEmpty() } ?: " "
+                        onInputUpdate(line)
+                    }
+
+                    in ' '.code..'z'.code -> {
                         line += key.toChar()
                         onInputUpdate(line)
                     }
+
 
                     13 -> {
                         launch {
                             onEnter(line.trim())
                         }
                     }
-
                 }
             }
         }

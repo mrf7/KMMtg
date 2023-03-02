@@ -11,6 +11,7 @@ version = "1.0-SNAPSHOT"
 dependencies {
     implementation(project(":scryfall"))
     implementation(project(":carddb"))
+    implementation(project(":collection-import"))
     implementation(libs.bundles.base)
     implementation("org.jline:jline:3.22.0")
 }

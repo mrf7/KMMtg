@@ -13,10 +13,12 @@ import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
+import models.SetDto
 
 interface ScryfallApi {
     suspend fun cardNamed(name: String): Either<String, CardDto>
     suspend fun searchCard(searchParam: String): Either<String, List<CardDto>>
+    suspend fun sets(): Either<String, List<SetDto>>
 }
 
 suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> =
@@ -42,6 +44,15 @@ class ScryfallApiImpl : ScryfallApi {
             parameter("q", searchParam)
         }
 
+        return resp
+            .toEither<JsonObject>()
+            .map { jsonObject -> jsonObject["data"].let { defaultJson.decodeFromJsonElement(it!!) } }
+    }
+
+    override suspend fun sets(): Either<String, List<SetDto>> {
+        val resp: HttpResponse = client.get {
+            scryfall("sets")
+        }
         return resp
             .toEither<JsonObject>()
             .map { jsonObject -> jsonObject["data"].let { defaultJson.decodeFromJsonElement(it!!) } }
