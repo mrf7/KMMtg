@@ -1,9 +1,62 @@
 import androidx.compose.runtime.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
 import org.jline.terminal.Terminal
 import org.jline.terminal.TerminalBuilder
 
 typealias Event = () -> Unit
+
+@Composable
+internal fun TrackKeysFlow(
+    viewModel: CliViewModel,
+    vararg actions: Pair<Char, Event>,
+    upArrow: Event = {},
+    downArrow: Event = {},
+    onEnter: Event = {},
+    onSpace: Event = {},
+    onBackspace: Event = {},
+) {
+    LaunchedEffect(true) {
+        viewModel.keyStrokes.collect { stroke ->
+            val trackedKeys = actions.associate { it.first to it.second }
+            when (stroke) {
+                is Character -> trackedKeys[stroke.letter]?.invoke()
+                Thing.Delete -> onBackspace()
+                Thing.Space -> onSpace()
+                Thing.Enter -> onEnter()
+                Thing.UpArrow -> upArrow()
+                Thing.DownArrow -> downArrow()
+            }
+        }
+    }
+}
+
+@Composable
+fun TrackInputFlow(viewModel: CliViewModel, onInputUpdate: (String) -> Unit, onEnter: suspend (String) -> Unit) {
+    var line by mutableStateOf(" ")
+    LaunchedEffect(true) {
+        viewModel.keyStrokes.collect { stroke ->
+            when (stroke) {
+                is Character -> {
+                    line += stroke.letter
+                    onInputUpdate(line)
+                }
+
+                Thing.Delete -> {
+                    line = line.dropLast(1).takeIf { it.isNotEmpty() } ?: " "
+                    onInputUpdate(line)
+                }
+
+                Thing.Enter -> {
+                    onEnter(line.trim())
+                }
+
+                else -> {}
+            }
+        }
+    }
+}
 
 @Composable
 internal fun TrackKeys(
