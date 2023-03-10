@@ -1,0 +1,12 @@
+CREATE TABLE CachedCard(
+    name TEXT NOT NULL,
+    set_code TEXT NOT NULL,
+    set_name TEXT NOT NULL,
+    image_url TEXT,
+    scryfall_url TEXT NOT NULL,
+    api_url TEXT NOT NULL,
+    image_uri TEXT NOT NULL
+);
+
+searchByName:
+SELECT * FROM CachedCard WHERE name LIKE ?;

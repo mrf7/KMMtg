@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CardDto(
     val name: String,
-    val set: String,
+    @SerialName("set")
+    val setCode: String,
     @SerialName("set_name")
     val setName: String,
     val id: String,

@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
 //    id("com.android.library") TODO This breaks for some reason
     kotlin("plugin.serialization")
+    id("com.squareup.sqldelight")
 }
 
 group = "com.mfriend"
@@ -11,21 +12,22 @@ kotlin {
     jvm()
     ios()
 //    android()
-    js(IR) {
-        browser()
-    }
+//    js(IR) {
+//        browser()
+//    }
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation(libs.bundles.base)
                 implementation(libs.bundles.web)
+                implementation(libs.sqldelight.coroutines)
+                implementation("com.squareup.sqldelight:runtime:1.5.5")
             }
         }
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.jvm)
-                implementation(libs.sqldelight.coroutines)
-                implementation(libs.sqldelight.driver)
+                implementation(libs.sqldelight.driver.jvm)
             }
         }
 //        val androidMain by getting {
@@ -33,11 +35,11 @@ kotlin {
 //                implementation(libs.ktor.client.okhttp)
 //            }
 //        }
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
-        }
+//        val jsMain by getting {
+//            dependencies {
+//                implementation(libs.ktor.client.js)
+//            }
+//        }
         val iosMain by getting {
             dependencies {
                 implementation(libs.ktor.client.ios)
@@ -49,6 +51,11 @@ kotlin {
     }
 }
 
+sqldelight {
+    database("ScryfallCache") {
+        packageName = "com.mfriend.scryfall.db"
+    }
+}
 //android {
 //    compileSdk = 30
 //    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

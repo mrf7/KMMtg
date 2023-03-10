@@ -78,7 +78,7 @@ class CliViewModel(
             }.map { (card, count) ->
                 Card(
                     card.name,
-                    card.set,
+                    card.setCode,
                     card.setName,
                     card.imageUris?.large?.url,
                     card.scryfallUrl.url,
@@ -98,7 +98,7 @@ class CliViewModel(
                 val selection = it.first()
                 val card = Card(
                     selection.name,
-                    selection.set,
+                    selection.setCode,
                     selection.setName,
                     selection.imageUris?.large?.url,
                     selection.scryfallUrl.url,
