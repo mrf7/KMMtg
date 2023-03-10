@@ -116,7 +116,7 @@ class CliViewModel(
 }
 
 sealed interface KeyStroke
-enum class Thing() : KeyStroke {
+enum class Thing : KeyStroke {
     Delete, Space, Enter, UpArrow, DownArrow
 }
 
