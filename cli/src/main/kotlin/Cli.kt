@@ -1,8 +1,7 @@
 import androidx.compose.runtime.*
 import arrow.core.continuations.either
 import arrow.core.getOrHandle
-import arrow.core.handleError
-import client.ScryfallApi
+import com.mfriend.client.ScryfallApi
 import com.jakewharton.mosaic.Color
 import com.jakewharton.mosaic.Column
 import com.jakewharton.mosaic.Text
@@ -23,9 +22,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.security.Key
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 import kotlin.system.exitProcess
 
 enum class Action(val text: String) {

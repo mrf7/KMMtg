@@ -1,4 +1,4 @@
-package models
+package com.mfriend.models
 
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport

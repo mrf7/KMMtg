@@ -2,7 +2,7 @@ package com.mfriend.collection
 
 import arrow.core.Either
 import arrow.core.continuations.either
-import client.ScryfallApi
+import com.mfriend.client.ScryfallApi
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 

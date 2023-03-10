@@ -1,9 +1,9 @@
-package client
+package com.mfriend.client
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import models.CardDto
+import com.mfriend.models.CardDto
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
@@ -11,10 +11,8 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.decodeFromJsonElement
-import models.ListResp
-import models.SetDto
+import com.mfriend.models.ListResp
+import com.mfriend.models.SetDto
 
 interface ScryfallApi {
     suspend fun cardNamed(name: String): Either<String, CardDto>
