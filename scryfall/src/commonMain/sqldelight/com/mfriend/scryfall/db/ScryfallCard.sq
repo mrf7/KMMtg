@@ -9,4 +9,4 @@ CREATE TABLE CachedCard(
 );
 
 searchByName:
-SELECT * FROM CachedCard WHERE name LIKE ?;
+SELECT * FROM CachedCard WHERE name LIKE ('%' || ? || '%');
