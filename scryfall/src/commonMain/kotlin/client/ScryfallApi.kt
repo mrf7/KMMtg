@@ -13,6 +13,7 @@ import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
+import models.ListResp
 import models.SetDto
 
 interface ScryfallApi {
@@ -45,8 +46,8 @@ class ScryfallApiImpl : ScryfallApi {
         }
 
         return resp
-            .toEither<JsonObject>()
-            .map { jsonObject -> jsonObject["data"].let { defaultJson.decodeFromJsonElement(it!!) } }
+            .toEither<ListResp<CardDto>>()
+            .map { it.data }
     }
 
     override suspend fun sets(): Either<String, List<SetDto>> {
@@ -54,8 +55,8 @@ class ScryfallApiImpl : ScryfallApi {
             scryfall("sets")
         }
         return resp
-            .toEither<JsonObject>()
-            .map { jsonObject -> jsonObject["data"].let { defaultJson.decodeFromJsonElement(it!!) } }
+            .toEither<ListResp<SetDto>>()
+            .map { it.data }
     }
 
     companion object {
