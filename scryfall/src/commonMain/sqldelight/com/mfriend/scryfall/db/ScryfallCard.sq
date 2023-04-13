@@ -8,5 +8,9 @@ CREATE TABLE CachedCard(
     image_uri TEXT NOT NULL
 );
 
+insert:
+INSERT INTO CachedCard(name,set_code, set_name,image_url,scryfall_url, api_url, image_uri)
+VALUES ?;
+
 searchByName:
-SELECT * FROM CachedCard WHERE name LIKE ('%' || ? || '%');
+SELECT * FROM CachedCard WHERE name LIKE ('%' || :term || '%');

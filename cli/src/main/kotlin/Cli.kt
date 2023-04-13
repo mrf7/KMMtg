@@ -11,6 +11,7 @@ import com.mfriend.collection.CollectionImporterImpl
 import com.mfriend.db.Card
 import com.mfriend.db.DatabaseHelper
 import com.mfriend.db.databaseModule
+import com.mfriend.scryfallModule
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*

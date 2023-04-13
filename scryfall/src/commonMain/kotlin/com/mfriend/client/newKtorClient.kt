@@ -16,6 +16,6 @@ internal fun newKtorClient(logLevel: LogLevel = LogLevel.NONE): HttpClient = Htt
     }
 }
 
-private val defaultJson = Json {
+internal val defaultJson = Json {
     ignoreUnknownKeys = true
 }

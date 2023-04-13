@@ -17,7 +17,7 @@ data class CardDto(
     val apiUri: Uri,
     @SerialName("image_uris")
     val imageUris: ImageUris? = null,
-    val prices: Prices,
+    val prices: Prices? = null,
 )
 
 @Serializable

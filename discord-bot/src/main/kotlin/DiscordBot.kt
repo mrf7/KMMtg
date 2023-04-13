@@ -1,4 +1,5 @@
 import com.mfriend.db.databaseModule
+import com.mfriend.scryfallModule
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.KoinApplication
 import org.koin.core.context.GlobalContext.startKoin
