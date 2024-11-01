@@ -5,11 +5,12 @@ CREATE TABLE CachedCard(
     image_url TEXT,
     scryfall_url TEXT NOT NULL,
     api_url TEXT NOT NULL,
-    image_uri TEXT NOT NULL
+    image_uri TEXT NOT NULL,
+    id TEXT NOT NULL
 );
 
 insert:
-INSERT INTO CachedCard(name,set_code, set_name,image_url,scryfall_url, api_url, image_uri)
+INSERT INTO CachedCard(name,set_code, set_name,image_url,scryfall_url, api_url, image_uri, id)
 VALUES ?;
 
 searchByName:
