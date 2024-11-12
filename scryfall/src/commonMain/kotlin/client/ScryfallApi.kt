@@ -3,6 +3,7 @@ package client
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import co.touchlab.kermit.Logger
 import models.CardDto
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -47,6 +48,7 @@ class ScryfallApiImpl : ScryfallApi {
 
         return resp
             .toEither<ListResp<CardDto>>()
+            .tap { if (it.hasMore) Logger.d("Scryfall") { "Search has more" } }
             .map { it.data }
     }
 

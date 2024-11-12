@@ -1,7 +1,7 @@
 import androidx.compose.runtime.*
 import arrow.core.continuations.either
+import arrow.core.getOrElse
 import arrow.core.getOrHandle
-import arrow.core.handleError
 import client.ScryfallApi
 import com.jakewharton.mosaic.Color
 import com.jakewharton.mosaic.Column
@@ -15,6 +15,7 @@ import com.mfriend.db.databaseModule
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
+import models.CardDto
 import org.jline.terminal.Terminal
 import org.jline.terminal.TerminalBuilder
 import org.koin.core.KoinApplication
@@ -23,15 +24,14 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import java.security.Key
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 import kotlin.system.exitProcess
 
 enum class Action(val text: String) {
     Search("Add Card By Search"),
     Parse("Translate CardCastle file"),
     ViewCollection("View Collection"),
+    BuildCube("Build Cube"),
     Exit("Exit")
 }
 
@@ -95,7 +95,7 @@ class CliViewModel(
         succ.getOrHandle { throw Exception(it) }
     }
 
-    suspend fun searchCard(query: String) {
+    suspend fun searchAndAddCards(query: String) {
         api.searchCard(query)
             .map {
                 val selection = it.first()
@@ -113,6 +113,9 @@ class CliViewModel(
 
     fun getCards() = database.getCards()
 
+    suspend fun searchCards(query: String): List<CardDto>? {
+        return api.searchCard(query).getOrElse { null }
+    }
 }
 
 sealed interface KeyStroke
@@ -134,6 +137,7 @@ suspend fun main() = runMosaic {
             Action.Search -> SearchCardAction(viewModel) { activeAction = null }
             Action.Parse -> Parse(viewModel) { activeAction = null }
             Action.ViewCollection -> Collection(viewModel) { activeAction = null }
+            Action.BuildCube -> SetCube(viewModel) { activeAction = null }
             Action.Exit -> exitProcess(0)
             null -> ActionSelection(viewModel) { activeAction = it }
         }
@@ -154,6 +158,24 @@ fun Parse(viewModel: CliViewModel, onComplete: Event) {
     TrackInputFlow(viewModel, { input = it }) {
         viewModel.translateCsv(it)
         onComplete()
+    }
+}
+
+@Composable
+fun SetCube(viewModel: CliViewModel, onComplete: Event) {
+    var input by mutableStateOf("")
+    var res: List<CardDto>? by remember { mutableStateOf(emptyList()) }
+    Column {
+        res?.let {
+            Text(it.size.toString())
+            Text(it.sumOf { it.prices.usd?.toDoubleOrNull() ?: 0.0 }.toString())
+        }
+        Text("Set code: ${input.trim()}")
+    }
+
+    TrackInputFlow(viewModel, { input = it }) {
+        res = viewModel.searchCards("s:$it unique=cards is:booster")
+//        onComplete()
     }
 }
 
@@ -196,7 +218,7 @@ fun SearchCardAction(viewModel: CliViewModel, onComplete: () -> Unit) {
         TrackInputFlow(viewModel, { line = it }) { input ->
             if (loading) return@TrackInputFlow
             loading = true
-            viewModel.searchCard(input)
+            viewModel.searchAndAddCards(input)
             loading = false
             onComplete()
         }
