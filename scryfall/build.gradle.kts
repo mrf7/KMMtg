@@ -23,7 +23,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation(libs.ktor.client.jvm)
+                implementation(libs.ktor.client.okhttp)
             }
         }
 //        val androidMain by getting {
