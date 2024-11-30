@@ -86,3 +86,4 @@ fabric.properties
 */build/
 /build
 /kotlin-js-store/
+/.kotlin
