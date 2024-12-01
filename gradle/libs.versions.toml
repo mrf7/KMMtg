@@ -1,6 +1,6 @@
 [versions]
 kermit = "1.2.2"
-arrow = "1.1.2"
+arrow = "1.2.4"
 koin = "3.3.3"
 ktor = "2.0.0"
 sqlDelight = "1.5.3"
@@ -11,10 +11,9 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
 ktor-client-core = { name = "ktor-client-core", group = "io.ktor", version.ref = "ktor" }
-ktor-client-jvm = { name = "ktor-client-jvm", group = "io.ktor", version.ref = "ktor" }
+#ktor-client-jvm = { name = "ktor-client-jvm", group = "io.ktor", version.ref = "ktor" }
 ktor-client-okhttp = { name = "ktor-client-okhttp", group = "io.ktor", version.ref = "ktor" }
 ktor-client-ios = { name = "ktor-client-ios", group = "io.ktor", version.ref = "ktor" }
 ktor-client-js = { name = "ktor-client-js", group = "io.ktor", version.ref = "ktor" }
@@ -23,7 +22,7 @@ ktor-content-negotiation = { name = "ktor-client-content-negotiation", group = "
 ktor-logging = { name = "ktor-client-logging", group = "io.ktor", version.ref = "ktor" }
 
 sqldelight-driver-jvm = {name = "sqlite-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
-sqldelight-driver-android = {name = "android-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
+#sqldelight-driver-android = {name = "android-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
 sqldelight-driver-native = {name = "native-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
 sqldelight-coroutines= {name = "coroutines-extensions", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
 

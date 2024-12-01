@@ -46,7 +46,7 @@ class ScryfallApiImpl : ScryfallApi {
 
         return resp
             .toEither<ListResp<CardDto>>()
-            .tap { if (it.hasMore) Logger.d("Scryfall") { "Search has more" } }
+            .onRight { if (it.hasMore) Logger.d("Scryfall") { "Search has more" } }
             .map { it.data }
     }
 
