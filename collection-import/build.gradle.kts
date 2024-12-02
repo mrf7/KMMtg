@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.mfriend"
@@ -11,16 +11,12 @@ kotlin {
     // TODO Csv reader currenetly only supports jvm and js. Might be able to add support for ios manually using okio
 //    ios()
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":scryfall"))
-                implementation(libs.bundles.base)
-                implementation("com.github.doyaaaaaken:kotlin-csv:1.6.0")
-            }
+        commonMain.dependencies {
+            implementation(project(":scryfall"))
+            implementation(libs.bundles.base)
+            implementation("com.github.doyaaaaaken:kotlin-csv:1.6.0")
         }
-        val jvmMain by getting {
-            dependencies {
-            }
+        jvmMain.dependencies {
         }
 //        val iosMain by getting {
 //            dependencies {

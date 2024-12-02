@@ -1,7 +1,7 @@
 package com.mfriend.db
 
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

@@ -1,8 +1,8 @@
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
 //    id("com.android.library")
-    id("com.squareup.sqldelight")
+    alias(libs.plugins.sqlDelight)
 }
 
 kotlin {
@@ -11,33 +11,28 @@ kotlin {
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     jvm()
-    ios()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
         /* Main source sets */
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.bundles.base)
-                implementation(libs.sqldelight.coroutines)
-                implementation("com.squareup.sqldelight:runtime:1.5.5")
-            }
+        commonMain.dependencies {
+            implementation(libs.bundles.base)
+            implementation(libs.sqldelight.coroutines)
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.driver.jvm)
-            }
+        jvmMain.dependencies {
+            implementation(libs.sqldelight.driver.jvm)
         }
 
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.sqldelight.driver.native)
-            }
+        iosMain.dependencies {
+            implementation(libs.sqldelight.driver.native)
         }
 
         // Test sets
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
 
         all {
@@ -47,8 +42,8 @@ kotlin {
 }
 
 sqldelight {
-    database("MTGDb") {
-        packageName = "com.mfriend.db"
+    databases.create("MTGDb") {
+        packageName.set("com.mfriend.db")
     }
 }
 //android {

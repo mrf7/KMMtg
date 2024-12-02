@@ -1,8 +1,9 @@
 package com.mfriend.db
 
-import com.squareup.sqldelight.db.SqlDriver
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.db.SqlDriver
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
 interface DatabaseHelper {
@@ -15,7 +16,8 @@ class DatabaseHelperImpl(sqlDriver: SqlDriver) : DatabaseHelper {
     override suspend fun insertCard(card: Card) {
         database.cardQueries.insertCard(card)
     }
+
     override fun getCards(): Flow<List<Card>> {
-        return database.cardQueries.selectAll().asFlow().mapToList()
+        return database.cardQueries.selectAll().asFlow().mapToList(Dispatchers.Default)
     }
 }

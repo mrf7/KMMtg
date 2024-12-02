@@ -1,9 +1,11 @@
 [versions]
+kotlin = "2.0.0"
 kermit = "1.2.2"
 arrow = "1.2.4"
 koin = "3.3.3"
 ktor = "2.0.0"
-sqlDelight = "1.5.3"
+sqlDelight = "2.0.0"
+#compose = "1.6.7"
 
 [libraries]
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
@@ -21,14 +23,18 @@ ktor-kotlinx-serialization = { name = "ktor-serialization-kotlinx-json", group =
 ktor-content-negotiation = { name = "ktor-client-content-negotiation", group = "io.ktor", version.ref = "ktor" }
 ktor-logging = { name = "ktor-client-logging", group = "io.ktor", version.ref = "ktor" }
 
-sqldelight-driver-jvm = {name = "sqlite-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
+sqldelight-driver-jvm = {name = "sqlite-driver", group = "app.cash.sqldelight", version.ref = "sqlDelight"}
 #sqldelight-driver-android = {name = "android-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
-sqldelight-driver-native = {name = "native-driver", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
-sqldelight-coroutines= {name = "coroutines-extensions", group = "com.squareup.sqldelight", version.ref = "sqlDelight"}
+sqldelight-driver-native = {name = "native-driver", group = "app.cash.sqldelight", version.ref = "sqlDelight"}
+sqldelight-coroutines= {name = "coroutines-extensions", group = "app.cash.sqldelight", version.ref = "sqlDelight"}
 
+mosaic = {  module = "com.jakewharton.mosaic:mosaic-runtime", version = "0.14.0" }
 
 [plugins]
-#kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [bundles]
 base = [

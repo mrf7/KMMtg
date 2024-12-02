@@ -1,7 +1,7 @@
 plugins {
-    kotlin("multiplatform")
+    alias(libs.plugins.kotlin.multiplatform)
 //    id("com.android.library") TODO This breaks for some reason
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 group = "com.mfriend"
@@ -9,37 +9,33 @@ version = "1.0-SNAPSHOT"
 
 kotlin {
     jvm()
-    ios()
-//    android()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
     js(IR) {
         browser()
     }
+
+    applyDefaultHierarchyTemplate()
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.bundles.base)
-                implementation(libs.bundles.web)
-            }
+        commonMain.dependencies {
+            implementation(libs.bundles.base)
+            implementation(libs.bundles.web)
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
 //        val androidMain by getting {
 //            dependencies {
 //                implementation(libs.ktor.client.okhttp)
 //            }
 //        }
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
-        val iosMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.ios)
-            }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.ios)
         }
         all {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")

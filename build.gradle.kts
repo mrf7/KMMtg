@@ -1,4 +1,7 @@
 plugins {
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.sqlDelight) apply false
 }
 
 group = "org.example"
@@ -11,17 +14,13 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.8.0")
-        classpath("com.android.tools.build:gradle:7.0.4")
-        classpath("com.squareup.sqldelight:gradle-plugin:1.5.5")
         classpath("com.jakewharton.mosaic:mosaic-gradle-plugin:0.4.0")
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+//allprojects {
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//}
