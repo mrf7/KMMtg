@@ -28,6 +28,7 @@ enum class Action(val text: String) {
     Parse("Translate CardCastle file"),
     ViewCollection("View Collection"),
     BuildCube("Build Cube"),
+    PauperRoulette("Pauper Roulette"),
     Exit("Exit")
 }
 
@@ -43,6 +44,7 @@ suspend fun main() = runMosaic {
             Action.ViewCollection -> Collection(viewModel) { activeAction = null }
             Action.BuildCube -> SetCube(viewModel) { activeAction = null }
             Action.Exit -> exitProcess(0)
+            Action.PauperRoulette -> PauperRoullete(koin.get()) { exitProcess(0) }
             null -> ActionSelection(viewModel) { activeAction = it }
         }
     }

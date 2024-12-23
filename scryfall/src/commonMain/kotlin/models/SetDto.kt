@@ -4,6 +4,7 @@ package models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+// https://scryfall.com/docs/api/sets
 @Serializable
 data class SetDto(
     @SerialName("name")
@@ -17,9 +18,13 @@ data class SetDto(
     @SerialName("id")
     val id: String,
     @SerialName("uri")
-    val uri: String
-//    @SerialName("digital")
-//    val digital: Boolean,
+    val uri: String,
+    @SerialName("digital")
+    val digital: Boolean,
+    @SerialName("set_type")
+    val setType: String,
+    @SerialName("arena_code")
+    val arenaCode: String? = null
 //    @SerialName("foil_only")
 //    val foilOnly: Boolean,
 //    @SerialName("icon_svg_uri")
@@ -34,8 +39,6 @@ data class SetDto(
 //    val printedSize: Int,
 //    @SerialName("released_at")
 //    val releasedAt: String,
-//    @SerialName("set_type")
-//    val setType: String,
 //    @SerialName("tcgplayer_id")
 //    val tcgplayerId: Int,
 )

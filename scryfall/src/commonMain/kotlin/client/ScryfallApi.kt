@@ -12,10 +12,11 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
+import io.ktor.utils.io.core.Closeable
 import models.ListResp
 import models.SetDto
 
-interface ScryfallApi {
+interface ScryfallApi: Closeable {
     suspend fun cardNamed(name: String): Either<String, CardDto>
     suspend fun searchCard(searchParam: String): Either<String, List<CardDto>>
     suspend fun sets(): Either<String, List<SetDto>>
@@ -29,6 +30,10 @@ suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> =
 
 class ScryfallApiImpl : ScryfallApi {
     private val client = newKtorClient()
+    override fun close() {
+        client.close()
+    }
+
     override suspend fun cardNamed(name: String): Either<String, CardDto> {
         val response = client.get {
             scryfall("$CardApiBase$FindNamed")
@@ -58,6 +63,7 @@ class ScryfallApiImpl : ScryfallApi {
             .toEither<ListResp<SetDto>>()
             .map { it.data }
     }
+
 
     companion object {
         const val ScryfallBaseUri: String = "https://api.scryfall.com"
