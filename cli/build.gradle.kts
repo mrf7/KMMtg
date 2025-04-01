@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":collection-import"))
     implementation(libs.bundles.base)
     implementation(libs.mosaic)
+    implementation(libs.mosaic.animation)
     implementation(libs.koin.compose)
 }
 

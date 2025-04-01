@@ -29,6 +29,7 @@ sqldelight-driver-native = { name = "native-driver", group = "app.cash.sqldeligh
 sqldelight-coroutines = { name = "coroutines-extensions", group = "app.cash.sqldelight", version.ref = "sqlDelight" }
 
 mosaic = { module = "com.jakewharton.mosaic:mosaic-runtime", version = "0.16.0" }
+mosaic-animation = { module = "com.jakewharton.mosaic:mosaic-animation", version = "0.16.0" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

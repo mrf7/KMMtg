@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.jakewharton.mosaic.ui.Color
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Text
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ fun SearchCardAction(viewModel: CliViewModel, onComplete: () -> Unit) {
         Text("Card Search Query:\n")
         TextInput(
             line,
+            color = Color.Green,
             onEnter = {
                 if (!loading) {
                     scope.launch {

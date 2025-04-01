@@ -27,5 +27,4 @@ fun SetCube(viewModel: CliViewModel, onComplete: () -> Unit) {
             input = it
         }
     }
-
 }
