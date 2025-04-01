@@ -1,24 +1,26 @@
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.jakewharton.mosaic.Color
-import com.jakewharton.mosaic.Column
-import com.jakewharton.mosaic.Text
+import co.touchlab.kermit.Logger
+import com.jakewharton.mosaic.layout.KeyEvent
+import com.jakewharton.mosaic.layout.onKeyEvent
+import com.jakewharton.mosaic.modifier.Modifier
 import com.jakewharton.mosaic.runMosaic
+import com.jakewharton.mosaic.ui.Color
+import com.jakewharton.mosaic.ui.Column
+import com.jakewharton.mosaic.ui.Text
 import com.mfriend.collection.CollectionImporter
 import com.mfriend.collection.CollectionImporterImpl
 import com.mfriend.db.databaseModule
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.awaitCancellation
 import models.CardDto
-import org.koin.core.KoinApplication
-import org.koin.core.context.GlobalContext.startKoin
+import org.koin.compose.KoinApplication
+import org.koin.compose.koinInject
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.parameter.parametersOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import kotlin.system.exitProcess
@@ -28,15 +30,17 @@ enum class Action(val text: String) {
     Parse("Translate CardCastle file"),
     ViewCollection("View Collection"),
     BuildCube("Build Cube"),
-    Exit("Exit")
+    Exit("Exit"),
 }
 
 suspend fun main() = runMosaic {
-    var activeAction by mutableStateOf<Action?>(null)
-    val koin = initKoin().koin
-    val viewModel: CliViewModel = koin.get { parametersOf(coroutineContext) }
+    KoinApplication(application = {
+        Logger.setLogWriters()
+        modules(scryfallModule, databaseModule, cliModule)
+    }) {
+        var activeAction by mutableStateOf<Action?>(null)
+        val viewModel: CliViewModel = koinInject()
 
-    setContent {
         when (activeAction) {
             Action.Search -> SearchCardAction(viewModel) { activeAction = null }
             Action.Parse -> Parse(viewModel) { activeAction = null }
@@ -45,10 +49,8 @@ suspend fun main() = runMosaic {
             Action.Exit -> exitProcess(0)
             null -> ActionSelection(viewModel) { activeAction = it }
         }
-    }
-    withContext(Dispatchers.IO) {
-        while (isActive) {
-            // Wait loop
+        LaunchedEffect(Unit) {
+            awaitCancellation()
         }
     }
 }
@@ -98,19 +100,22 @@ fun Collection(viewModel: CliViewModel, onComplete: Event) {
 @Composable
 fun ActionSelection(viewModel: CliViewModel, onSelect: (Action) -> Unit) {
     var selection by mutableStateOf(0)
-    Column {
-        for (action in Action.values()) {
-            Text(action.text, background = Color.White.takeIf { selection == action.ordinal })
+    Column(
+        modifier = Modifier.onKeyEvent {
+            println(it)
+            selection = when (it) {
+                KeyEvent("ArrowUp") -> (selection - 1).coerceAtLeast(0)
+                KeyEvent("ArrowDown") -> (selection + 1).coerceAtLeast(0)
+                KeyEvent("q") -> exitProcess(0)
+                else -> return@onKeyEvent false
+            }
+            true
+        },
+    ) {
+        for (action in Action.entries) {
+            Text(action.text, background = Color.White.takeIf { selection == action.ordinal } ?: Color.Unspecified)
         }
     }
-    TrackKeysFlow(
-        viewModel,
-        'q' to { exitProcess(0) },
-        upArrow = { selection = (selection - 1).coerceAtLeast(0) },
-        downArrow = { selection = (selection + 1).coerceAtMost(Action.values().size - 1) },
-        onEnter = { onSelect(Action.values()[selection]) },
-        onSpace = { onSelect(Action.values()[selection]) }
-    )
 }
 
 @Composable
@@ -127,10 +132,6 @@ fun SearchCardAction(viewModel: CliViewModel, onComplete: () -> Unit) {
             onComplete()
         }
     }
-}
-
-fun initKoin(): KoinApplication = startKoin {
-    modules(scryfallModule, databaseModule, cliModule)
 }
 
 private val cliModule = module {

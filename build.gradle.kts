@@ -13,14 +13,4 @@ buildscript {
         google()
         gradlePluginPortal()
     }
-    dependencies {
-        classpath("com.jakewharton.mosaic:mosaic-gradle-plugin:0.4.0")
-    }
 }
-
-//allprojects {
-//    repositories {
-//        google()
-//        mavenCentral()
-//    }
-//}

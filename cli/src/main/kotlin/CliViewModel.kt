@@ -14,28 +14,30 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.job
 import kotlinx.coroutines.yield
 import models.CardDto
 import org.jline.terminal.Terminal
 import org.jline.terminal.TerminalBuilder
-import kotlin.coroutines.CoroutineContext
 
 sealed interface KeyStroke
 enum class Thing : KeyStroke {
-    Delete, Space, Enter, UpArrow, DownArrow
+    Delete,
+    Space,
+    Enter,
+    UpArrow,
+    DownArrow,
 }
 
 class Character(code: Int) : KeyStroke {
     val letter: Char = code.toChar()
 }
+
 class CliViewModel(
     private val importer: CollectionImporter,
     private val database: DatabaseHelper,
     private val api: ScryfallApi,
-    context: CoroutineContext
 ) {
-    private val scope = CoroutineScope(context + SupervisorJob(context.job))
+    private val scope = CoroutineScope(SupervisorJob())
     val keyStrokes: SharedFlow<KeyStroke> = flow {
         val terminal: Terminal = TerminalBuilder.terminal()
         terminal.enterRawMode()
@@ -107,7 +109,5 @@ class CliViewModel(
 
     fun getCards() = database.getCards()
 
-    suspend fun searchCards(query: String): List<CardDto>? {
-        return api.searchCard(query).getOrElse { null }
-    }
+    suspend fun searchCards(query: String): List<CardDto>? = api.searchCard(query).getOrElse { null }
 }
