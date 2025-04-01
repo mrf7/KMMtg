@@ -1,19 +1,23 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.jakewharton.mosaic.ui.Column
-import com.jakewharton.mosaic.ui.Text
+import kotlinx.coroutines.launch
 
 @Composable
 fun Parse(viewModel: CliViewModel, onComplete: () -> Unit) {
     var input by mutableStateOf("")
+    val scope = rememberCoroutineScope()
     Column {
-        Text("Filepath: ${input.trim()}")
+        TextInput("Filepath: ${input.trim()}", onEnter = {
+            scope.launch {
+                viewModel.translateCsv(input)
+                onComplete()
+            }
+        }) {
+            input = it.trim()
+        }
     }
-    // TODO MRF fix parse input
-//    TrackInputFlow(viewModel, { input = it }) {
-//        viewModel.translateCsv(it)
-//        onComplete()
-//    }
 }
