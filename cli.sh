@@ -1,2 +1,1 @@
-./gradlew cli:installDist
-./cli/build/install/cli/bin/cli 
+./gradlew cli:installDist && ./cli/build/install/cli/bin/cli 

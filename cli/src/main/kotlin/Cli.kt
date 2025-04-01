@@ -1,6 +1,5 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,7 +16,6 @@ import com.mfriend.collection.CollectionImporter
 import com.mfriend.collection.CollectionImporterImpl
 import com.mfriend.db.databaseModule
 import kotlinx.coroutines.awaitCancellation
-import models.CardDto
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.dsl.singleOf
@@ -40,14 +38,15 @@ suspend fun main() = runMosaic {
     }) {
         var activeAction by mutableStateOf<Action?>(null)
         val viewModel: CliViewModel = koinInject()
-
-        when (activeAction) {
-            Action.Search -> SearchCardAction(viewModel) { activeAction = null }
-            Action.Parse -> Parse(viewModel) { activeAction = null }
-            Action.ViewCollection -> Collection(viewModel) { activeAction = null }
-            Action.BuildCube -> SetCube(viewModel) { activeAction = null }
-            Action.Exit -> exitProcess(0)
-            null -> ActionSelection(viewModel) { activeAction = it }
+        Column {
+            when (activeAction) {
+                Action.Search -> SearchCardAction(viewModel) { activeAction = null }
+                Action.Parse -> Parse(viewModel) { activeAction = null }
+                Action.ViewCollection -> Collection(viewModel) { activeAction = null }
+                Action.BuildCube -> SetCube(viewModel) { activeAction = null }
+                Action.Exit -> exitProcess(0)
+                null -> ActionSelection { activeAction = it }
+            }
         }
         LaunchedEffect(Unit) {
             awaitCancellation()
@@ -56,80 +55,29 @@ suspend fun main() = runMosaic {
 }
 
 @Composable
-fun Parse(viewModel: CliViewModel, onComplete: Event) {
-    var input by mutableStateOf("")
-    Column {
-        Text("Filepath: ${input.trim()}")
-    }
-    TrackInputFlow(viewModel, { input = it }) {
-        viewModel.translateCsv(it)
-        onComplete()
-    }
-}
-
-@Composable
-fun SetCube(viewModel: CliViewModel, onComplete: Event) {
-    var input by mutableStateOf("")
-    var res: List<CardDto>? by remember { mutableStateOf(emptyList()) }
-    Column {
-        res?.let {
-            Text(it.size.toString())
-            Text(it.sumOf { it.prices.usd?.toDoubleOrNull() ?: 0.0 }.toString())
-        }
-        Text("Set code: ${input.trim()}")
-    }
-
-    TrackInputFlow(viewModel, { input = it }) {
-        res = viewModel.searchCards("s:$it unique=cards is:booster")
-//        onComplete()
-    }
-}
-
-@Composable
-fun Collection(viewModel: CliViewModel, onComplete: Event) {
-    val cards by viewModel.getCards().collectAsState(emptyList())
-    Column {
-        Text("Your Collection")
-        for (card in cards) {
-            Text(card.toString())
-        }
-    }
-    TrackKeysFlow(viewModel, 'b' to onComplete, onBackspace = onComplete)
-}
-
-@Composable
-fun ActionSelection(viewModel: CliViewModel, onSelect: (Action) -> Unit) {
-    var selection by mutableStateOf(0)
+fun ActionSelection(onSelect: (Action) -> Unit) {
+    var selection by remember { mutableStateOf(0) }
+    var keyEvent by remember { mutableStateOf<KeyEvent?>(null) }
     Column(
         modifier = Modifier.onKeyEvent {
-            println(it)
+            keyEvent = it
             selection = when (it) {
                 KeyEvent("ArrowUp") -> (selection - 1).coerceAtLeast(0)
                 KeyEvent("ArrowDown") -> (selection + 1).coerceAtLeast(0)
                 KeyEvent("q") -> exitProcess(0)
+                KeyEvent(" "), KeyEvent("Enter") -> {
+                    onSelect(Action.entries[selection])
+                    return@onKeyEvent true
+                }
+
                 else -> return@onKeyEvent false
             }
             true
         },
     ) {
+        Text(keyEvent?.toString() ?: "None")
         for (action in Action.entries) {
             Text(action.text, background = Color.White.takeIf { selection == action.ordinal } ?: Color.Unspecified)
-        }
-    }
-}
-
-@Composable
-fun SearchCardAction(viewModel: CliViewModel, onComplete: () -> Unit) {
-    var line by remember { mutableStateOf("") }
-    var loading by remember { mutableStateOf(false) }
-    Column {
-        Text("Card Search Query:\n $line")
-        TrackInputFlow(viewModel, { line = it }) { input ->
-            if (loading) return@TrackInputFlow
-            loading = true
-            viewModel.searchAndAddCards(input)
-            loading = false
-            onComplete()
         }
     }
 }

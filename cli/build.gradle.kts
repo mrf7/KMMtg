@@ -14,7 +14,6 @@ dependencies {
     implementation(libs.bundles.base)
     implementation(libs.mosaic)
     implementation(libs.koin.compose)
-    implementation("org.jline:jline:3.22.0")
 }
 
 application {
