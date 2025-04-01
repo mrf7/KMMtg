@@ -1,6 +1,5 @@
-import arrow.core.continuations.either
 import arrow.core.getOrElse
-import arrow.core.getOrHandle
+import arrow.core.raise.either
 import client.ScryfallApi
 import com.mfriend.collection.CollectionImporter
 import com.mfriend.db.Card
@@ -34,7 +33,7 @@ class CliViewModel(
             }
             return@either cardRows.size
         }
-        succ.getOrHandle { throw Exception(it) }
+        succ.getOrElse { throw Exception(it) }
     }
 
     suspend fun searchAndAddCards(query: String) {

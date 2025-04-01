@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import co.touchlab.kermit.Logger
-import models.CardDto
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
@@ -12,6 +11,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
+import models.CardDto
 import models.ListResp
 import models.SetDto
 
@@ -21,11 +21,10 @@ interface ScryfallApi {
     suspend fun sets(): Either<String, List<SetDto>>
 }
 
-suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> =
-    when (this.status.value) {
-        in 200..299 -> this.body<T>().right()
-        else -> this.body<String>().left()
-    }
+suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> = when (this.status.value) {
+    in 200..299 -> this.body<T>().right()
+    else -> this.body<String>().left()
+}
 
 class ScryfallApiImpl : ScryfallApi {
     private val client = newKtorClient()
