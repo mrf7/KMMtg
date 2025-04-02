@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.1.20"
-kermit = "1.2.2"
+kermit = "2.0.5"
 arrow = "1.2.4"
 koin = "4.0.3"
 ktor = "2.0.0"

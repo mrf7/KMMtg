@@ -47,7 +47,6 @@ class CliViewModel(
                     selection.imageUris?.large?.url,
                     selection.scryfallUrl.url,
                 )
-                delay(500)
                 database.insertCard(card)
             }.mapLeft { throw Exception(it) }
     }
