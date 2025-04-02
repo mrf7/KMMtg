@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.mosaic)
     implementation(libs.mosaic.animation)
     // gets rid of annoying logger thing missing, prob a better way but im not sure what lib is bringing in the dep on it
-    implementation ("ch.qos.logback:logback-classic:1.2.3")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation(libs.koin.compose)
 }
 

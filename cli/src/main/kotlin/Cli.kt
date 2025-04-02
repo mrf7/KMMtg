@@ -1,21 +1,28 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import com.jakewharton.mosaic.layout.KeyEvent
+import com.jakewharton.mosaic.layout.fillMaxWidth
 import com.jakewharton.mosaic.layout.onKeyEvent
+import com.jakewharton.mosaic.layout.width
 import com.jakewharton.mosaic.modifier.Modifier
 import com.jakewharton.mosaic.runMosaic
 import com.jakewharton.mosaic.ui.Color
 import com.jakewharton.mosaic.ui.Column
+import com.jakewharton.mosaic.ui.Row
+import com.jakewharton.mosaic.ui.Spacer
 import com.jakewharton.mosaic.ui.Text
 import com.mfriend.collection.CollectionImporter
 import com.mfriend.collection.CollectionImporterImpl
 import com.mfriend.db.databaseModule
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.delay
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.dsl.singleOf
@@ -33,12 +40,12 @@ enum class Action(val text: String) {
 
 suspend fun main() = runMosaic {
     KoinApplication(application = {
-        Logger.setLogWriters()
+        Logger.setLogWriters(ComposeLogger)
         modules(scryfallModule, databaseModule, cliModule)
     }) {
         var activeAction by mutableStateOf<Action?>(null)
         val viewModel: CliViewModel = koinInject()
-        Column {
+        Row(Modifier.fillMaxWidth()) {
             when (activeAction) {
                 Action.Search -> SearchCardAction(viewModel) { activeAction = null }
                 Action.Parse -> Parse(viewModel) { activeAction = null }
@@ -46,6 +53,19 @@ suspend fun main() = runMosaic {
                 Action.BuildCube -> SetCube(viewModel) { activeAction = null }
                 Action.Exit -> exitProcess(0)
                 null -> ActionSelection { activeAction = it }
+            }
+            Spacer(Modifier.width(50))
+            Column {
+                val logs by viewModel.logs.collectAsState()
+                logs.takeLast(10).forEach {
+                    Text(it.message, color = if (it.level == Severity.Error) Color.Red else Color.Unspecified)
+                }
+                LaunchedEffect(Unit) {
+                    repeat(100) {
+                        delay(500)
+                        Logger.log(Severity.entries.random(), "Tag", null, "$it")
+                    }
+                }
             }
         }
         LaunchedEffect(Unit) {
@@ -85,4 +105,5 @@ fun ActionSelection(onSelect: (Action) -> Unit) {
 private val cliModule = module {
     singleOf(::CliViewModel)
     singleOf(::CollectionImporterImpl) bind CollectionImporter::class
+    single { ComposeLogger }
 }

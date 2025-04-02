@@ -4,15 +4,15 @@ import client.ScryfallApi
 import com.mfriend.collection.CollectionImporter
 import com.mfriend.db.Card
 import com.mfriend.db.DatabaseHelper
-import kotlinx.coroutines.delay
 import models.CardDto
 
 class CliViewModel(
     private val importer: CollectionImporter,
     private val database: DatabaseHelper,
     private val api: ScryfallApi,
+    private val composeLogger: ComposeLogger,
 ) {
-
+    val logs = composeLogger.logs
     suspend fun translateCsv(filePath: String) {
         val succ = either {
             val imported = importer.parseCardCastle(filePath).bind()
