@@ -32,7 +32,7 @@ class CollectionImporterImpl(private val client: ScryfallApi) : CollectionImport
     }
 
     override suspend fun writeDeckbox(fileName: String, entries: List<CardEntry>) {
-        csvWriter().openAsync("${fileName}.csv") {
+        csvWriter().openAsync("$fileName.csv") {
             val rows = entries.map { entry ->
                 listOf(entry.count, entry.name, entry.set, entry.number, if (entry.foil) "foil" else "")
             }
@@ -46,7 +46,6 @@ class CollectionImporterImpl(private val client: ScryfallApi) : CollectionImport
         count = row.getValue("Count").toInt(),
         set = sets[row.getValue("Set Name")]!!,
         number = row.getValue("Collector Number"),
-        foil = row.getValue("Foil").toBoolean()
+        foil = row.getValue("Foil").toBoolean(),
     )
 }
-
