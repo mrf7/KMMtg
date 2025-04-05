@@ -36,6 +36,7 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-runtime = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose"}
 
 [bundles]
 base = [
