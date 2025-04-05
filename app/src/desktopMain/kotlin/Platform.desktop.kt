@@ -1,0 +1,1 @@
+actual val Platform: String = "Desktop"
