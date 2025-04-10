@@ -1,4 +1,5 @@
 CREATE TABLE Card (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     set_code TEXT NOT NULL,
     set_name TEXT NOT NULL,

@@ -1,0 +1,13 @@
+CREATE TABLE User (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+selectAllUsers:
+SELECT * FROM User;
+
+insertUser:
+INSERT INTO User(username, email)
+VALUES (?, ?);

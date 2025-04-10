@@ -17,7 +17,10 @@ class DatabaseHelperImpl(sqlDriver: SqlDriver) : DatabaseHelper {
         database.cardQueries.insertCard(card)
     }
 
-    override fun getCards(): Flow<List<Card>> {
-        return database.cardQueries.selectAll().asFlow().mapToList(Dispatchers.Default)
+    override fun getCards(): Flow<List<Card>> = database.cardQueries.selectAll().asFlow().mapToList(Dispatchers.Default)
+    fun getDeck(id: Long) {
+        database.deckQueries.selectDeckById(id).executeAsOneOrNull()?.let {
+            println(it)
+        }
     }
 }

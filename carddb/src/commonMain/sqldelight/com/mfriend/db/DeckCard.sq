@@ -1,0 +1,22 @@
+CREATE TABLE DeckCard (
+    deck_id INTEGER NOT NULL,
+    card_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    PRIMARY KEY (deck_id, card_id),
+    FOREIGN KEY (deck_id) REFERENCES Deck(deck_id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES Card(id) ON DELETE CASCADE
+);
+
+getCardsInDeck:
+SELECT Card.*
+FROM DeckCard
+JOIN Card ON DeckCard.card_id = Card.rowid
+WHERE DeckCard.deck_id = ?;
+
+addCardToDeck:
+INSERT INTO DeckCard(deck_id, card_id, quantity)
+VALUES (?, ?, ?);
+
+removeCardFromDeck:
+DELETE FROM DeckCard
+WHERE deck_id = ? AND card_id = ?;

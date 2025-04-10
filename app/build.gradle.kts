@@ -46,10 +46,18 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            implementation(libs.lifecycle.viewmodel.android)
+            implementation(libs.bundles.base)
+            implementation(project(":scryfall"))
 //            implementation(libs.androidx.lifecycle.viewmodel)
 //            implementation(libs.androidx.lifecycle.runtime.compose)
         }
         desktopMain.dependencies {
+            implementation(project(":carddb"))
+            // TODO csv reader supports js, can probably use that from wasm?
+            implementation(project(":collection-import"))
+
             implementation(compose.desktop.currentOs)
         }
     }

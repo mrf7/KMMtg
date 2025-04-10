@@ -1,0 +1,29 @@
+CREATE TABLE Deck (
+    deck_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    format TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
+);
+
+selectAllDecks:
+SELECT * FROM Deck;
+
+selectDecksByUser:
+SELECT * FROM Deck
+WHERE user_id = ?;
+
+selectDeckById:
+SELECT *
+FROM Deck
+WHERE deck_id = ?;
+
+insertDeck:
+INSERT INTO Deck(user_id, name, format)
+VALUES (?, ?, ?);
+
+deleteDeckById:
+DELETE FROM Deck
+WHERE deck_id = ?;

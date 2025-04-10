@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
 //    id("com.android.library") TODO This breaks for some reason
@@ -16,6 +18,9 @@ kotlin {
     js(IR) {
         browser()
     }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
 
     applyDefaultHierarchyTemplate()
     sourceSets {
@@ -43,10 +48,10 @@ kotlin {
     }
 }
 
-//android {
+// android {
 //    compileSdk = 30
 //    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 //    defaultConfig {
 //        minSdk = 21
 //    }
-//}
+// }

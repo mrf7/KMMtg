@@ -9,7 +9,8 @@ version = "1.0-SNAPSHOT"
 kotlin {
     jvm()
     // TODO Csv reader currenetly only supports jvm and js. Might be able to add support for ios manually using okio
-//    ios()
+    // ios()
+    // wasmJs
     sourceSets {
         commonMain.dependencies {
             implementation(project(":scryfall"))
@@ -27,4 +28,3 @@ kotlin {
         }
     }
 }
-
