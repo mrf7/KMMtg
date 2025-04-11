@@ -21,6 +21,7 @@ class CliViewModel(
                     .first() to importCard.count
             }.map { (card, count) ->
                 Card(
+                    -1, // TODO Fix insert
                     card.name,
                     card.set,
                     card.setName,
@@ -41,6 +42,7 @@ class CliViewModel(
             .map {
                 val selection = it.first()
                 val card = Card(
+                    -1, // TODO Fix insert
                     selection.name,
                     selection.set,
                     selection.setName,

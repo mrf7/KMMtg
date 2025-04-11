@@ -23,4 +23,19 @@ class DatabaseHelperImpl(sqlDriver: SqlDriver) : DatabaseHelper {
             println(it)
         }
     }
+
+    fun insertDeck(name: String) {
+        return database.deckQueries.insertDeck(name, null)
+    }
+
+    fun getDecks(): List<Deck> {
+        return database.deckQueries.selectAllDecks().executeAsList()
+    }
+
+    fun getCardsinDeck(deck: Deck) = database.deckCardQueries.getCardsInDeck(deck.deck_id).executeAsList()
+
+    fun insertCard(deck: Deck, card: Card) {
+        database.cardQueries.insertCard(card)
+        database.deckCardQueries.addCardToDeck(deck.deck_id, card.id, 1)
+    }
 }
