@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    alias(libs.plugins.ksp)
 }
 
 group = "org.example"
@@ -10,6 +11,8 @@ dependencies {
     implementation(project(":carddb"))
     implementation(project(":utils"))
     implementation(libs.bundles.base)
+    implementation(libs.arrow.optics)
+    ksp(libs.arrow.optics.ksp)
 }
 kotlin {
     compilerOptions {
