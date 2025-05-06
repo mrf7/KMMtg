@@ -25,6 +25,7 @@ kotlin {
     applyDefaultHierarchyTemplate()
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":utils"))
             implementation(libs.bundles.base)
             implementation(libs.bundles.web)
         }
@@ -45,6 +46,9 @@ kotlin {
         all {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
+    }
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }
 

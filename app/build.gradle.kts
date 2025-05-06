@@ -40,6 +40,7 @@ kotlin {
     sourceSets {
         val desktopMain by getting
         commonMain.dependencies {
+            implementation(project(":utils"))
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -60,6 +61,9 @@ kotlin {
 
             implementation(compose.desktop.currentOs)
         }
+    }
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }
 

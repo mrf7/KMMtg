@@ -5,6 +5,7 @@ include("discord-bot")
 include(":collection-import")
 include(":cli")
 include(":app")
+include("utils")
 
 pluginManagement {
     repositories {

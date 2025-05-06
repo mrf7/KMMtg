@@ -6,9 +6,9 @@ plugins {
 }
 
 kotlin {
-    /* Targets configuration omitted. 
-    *  To find out how to configure the targets, please follow the link:
-    *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
+    /* Targets configuration omitted.
+     *  To find out how to configure the targets, please follow the link:
+     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     jvm()
     iosX64()
@@ -19,6 +19,7 @@ kotlin {
     sourceSets {
         /* Main source sets */
         commonMain.dependencies {
+            implementation(project(":utils"))
             implementation(libs.bundles.base)
             implementation(libs.sqldelight.coroutines)
         }
@@ -39,6 +40,10 @@ kotlin {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
     }
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
 }
 
 sqldelight {
@@ -46,10 +51,10 @@ sqldelight {
         packageName.set("com.mfriend.db")
     }
 }
-//android {
+// android {
 //    compileSdk = 30
 //    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 //    defaultConfig {
 //        minSdk = 21
 //    }
-//}
+// }

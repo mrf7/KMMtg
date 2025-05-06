@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":scryfall"))
     implementation(project(":carddb"))
     implementation(project(":collection-import"))
+    implementation(project(":utils"))
     implementation(libs.bundles.base)
     implementation(libs.mosaic)
     implementation(libs.mosaic.animation)
@@ -19,6 +20,11 @@ dependencies {
     implementation(libs.koin.compose)
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
+}
 application {
     mainClass.set("CliKt")
 }

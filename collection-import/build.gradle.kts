@@ -14,6 +14,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":scryfall"))
+            implementation(project(":utils"))
             implementation(libs.bundles.base)
             implementation("com.github.doyaaaaaken:kotlin-csv:1.6.0")
         }
@@ -26,5 +27,8 @@ kotlin {
         all {
             languageSettings.optIn("kotlin.js.ExperimentalJsExport")
         }
+    }
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }
