@@ -5,9 +5,9 @@ import org.koin.core.KoinApplication
 import org.koin.core.context.GlobalContext.startKoin
 
 suspend fun main() {
-    ScryfallApiImpl().use { scryfallApi ->
+    ScryfallApiImpl().use { api ->
         val x = either {
-            scryfallApi.cardNamedRaise("black lotus")
+            api.cardNamedRaise("black lotus")
         }
         println(x)
     }

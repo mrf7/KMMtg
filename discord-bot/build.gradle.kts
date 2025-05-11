@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":utils"))
     implementation(libs.bundles.base)
     implementation(libs.arrow.optics)
+    implementation(libs.arrow.fx.coroutines)
     ksp(libs.arrow.optics.ksp)
 }
 kotlin {
