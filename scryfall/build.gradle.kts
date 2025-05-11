@@ -20,7 +20,9 @@ kotlin {
     }
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
+    wasmJs{
+        browser()
+    }
 
     applyDefaultHierarchyTemplate()
     sourceSets {
