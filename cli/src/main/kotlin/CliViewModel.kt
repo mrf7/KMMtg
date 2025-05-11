@@ -10,9 +10,10 @@ class CliViewModel(
     private val importer: CollectionImporter,
     private val database: DatabaseHelper,
     private val api: ScryfallApi,
-    private val composeLogger: ComposeLogger,
+    composeLogger: ComposeLogger,
 ) {
     val logs = composeLogger.logs
+    // TODO Replace with raise and expose results to UI
     suspend fun translateCsv(filePath: String) {
         val succ = either {
             val imported = importer.parseCardCastle(filePath).bind()

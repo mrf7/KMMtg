@@ -2,6 +2,7 @@ package com.mfriend.collection
 
 import arrow.core.Either
 import arrow.core.raise.either
+import arrow.core.raise.withError
 import client.ScryfallApi
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
@@ -17,10 +18,8 @@ interface CollectionImporter {
 
 class CollectionImporterImpl(private val client: ScryfallApi) : CollectionImporter {
     override suspend fun parseCardCastle(fileName: String): Either<String, List<CardEntry>> = either {
-        val setMap = client.sets()
-            .map { sets ->
-                sets.associate { it.name to it.code }
-            }.bind()
+        val setMap = withError({ it.details }) { client.setsRaise() }
+            .associate { it.name to it.code }
 
         return@either Either.catch {
             csvReader().openAsync(fileName) {

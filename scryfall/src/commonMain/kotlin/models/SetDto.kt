@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("set")
 data class SetDto(
     @SerialName("name")
     val name: String,

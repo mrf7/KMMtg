@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("list")
 internal data class ListResp<out T>(
     val data: List<T>,
     @SerialName("has_more")

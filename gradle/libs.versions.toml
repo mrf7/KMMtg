@@ -41,7 +41,7 @@ sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-runtime = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }
-ksp = { id = "com.google.devtools.ksp", version = "2.1.20-2.0.0" }
+ksp = { id = "com.google.devtools.ksp", version = "2.2.0-Beta2-2.0.1" }
 
 [bundles]
 base = [
