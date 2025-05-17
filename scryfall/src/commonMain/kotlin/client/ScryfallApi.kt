@@ -1,10 +1,7 @@
 package client
 
-import arrow.core.Either
 import arrow.core.raise.Raise
 import arrow.core.raise.catch
-import arrow.core.raise.either
-import arrow.core.raise.withError
 import ensure
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -32,9 +29,6 @@ interface ScryfallApi : AutoCloseable {
 
     context(_: Raise<ScryfallError>)
     suspend fun setsRaise(): List<SetDto>
-
-    @Deprecated("Use raise variant", replaceWith = ReplaceWith("searchCardRaise(searchParam)"))
-    suspend fun searchCard(searchParam: String): Either<String, List<CardDto>>
 }
 
 class ScryfallApiImpl : ScryfallApi, AutoCloseable {
@@ -82,11 +76,6 @@ class ScryfallApiImpl : ScryfallApi, AutoCloseable {
     context(_: Raise<ScryfallError>)
     override suspend fun setsRaise(): List<SetDto> =
         client.get { scryfall("sets") }.responseBodyOrRaise<ListResp<SetDto>>().data
-
-    @Deprecated("Use raise variant", replaceWith = ReplaceWith("searchCardRaise(searchParam)"))
-    override suspend fun searchCard(searchParam: String): Either<String, List<CardDto>> = either {
-        withError({ it.toString() }) { searchCardRaise(searchParam) }
-    }
 
     companion object {
         const val ScryfallBaseUri: String = "https://api.scryfall.com"

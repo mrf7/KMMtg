@@ -1,6 +1,11 @@
+import arrow.core.NonEmptyList
 import arrow.core.getOrElse
 import arrow.core.raise.either
+import arrow.core.raise.nullable
+import arrow.core.raise.recover
+import arrow.core.toNonEmptyListOrNull
 import client.ScryfallApi
+import co.touchlab.kermit.Logger
 import com.mfriend.collection.CollectionImporter
 import com.mfriend.db.Card
 import com.mfriend.db.DatabaseHelper
@@ -13,13 +18,16 @@ class CliViewModel(
     composeLogger: ComposeLogger,
 ) {
     val logs = composeLogger.logs
+
     // TODO Replace with raise and expose results to UI
     suspend fun translateCsv(filePath: String) {
         val succ = either {
             val imported = importer.parseCardCastle(filePath).bind()
             val cardRows = imported.map { importCard ->
-                api.searchCard("${importCard.name} s:${importCard.set} cn:\"${importCard.number}\"").bind()
-                    .first() to importCard.count
+                val results = withErrorString {
+                    api.searchCardRaise("${importCard.name} s:${importCard.set} cn:\"${importCard.number}\"")
+                }
+                results.first() to importCard.count
             }.map { (card, count) ->
                 Card(
                     -1, // TODO Fix insert
@@ -39,22 +47,25 @@ class CliViewModel(
     }
 
     suspend fun searchAndAddCards(query: String) {
-        api.searchCard(query)
-            .map {
-                val selection = it.first()
-                val card = Card(
-                    -1, // TODO Fix insert
-                    selection.name,
-                    selection.set,
-                    selection.setName,
-                    selection.imageUris?.large?.url,
-                    selection.scryfallUrl.url,
-                )
-                database.insertCard(card)
-            }.mapLeft { throw Exception(it) }
+        // TODO make this pure or something
+        recover({
+            val results = api.searchCardRaise(query)
+            val selection = results.first()
+            val card = Card(
+                -1, // TODO Fix insert
+                selection.name,
+                selection.set,
+                selection.setName,
+                selection.imageUris?.large?.url,
+                selection.scryfallUrl.url,
+            )
+            database.insertCard(card)
+        }, { Logger.e(it.toString()) })
     }
 
     fun getCards() = database.getCards()
 
-    suspend fun searchCards(query: String): List<CardDto>? = api.searchCard(query).getOrElse { null }
+    suspend fun searchCards(query: String): NonEmptyList<CardDto>? = nullable {
+        ignoreErrors { api.searchCardRaise(query).toNonEmptyListOrNull() }
+    }
 }
