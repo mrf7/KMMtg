@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.0-Beta2"
+kotlin = "2.2.0-RC"
 kermit = "2.0.5"
 arrow = "2.1.1"
 koin = "4.0.3"

@@ -1,18 +1,18 @@
-import arrow.core.raise.either
+import arrow.core.raise.ExperimentalTraceApi
+import arrow.core.raise.recover
 import client.ScryfallApiImpl
-import com.mfriend.db.databaseModule
-import org.koin.core.KoinApplication
-import org.koin.core.context.GlobalContext.startKoin
 
+@OptIn(ExperimentalTraceApi::class)
 suspend fun main() {
     ScryfallApiImpl().use { api ->
-        val x = either {
-            api.cardNamedRaise("black lotus")
-        }
-        println(x)
+        recover(
+            block = {
+                listOf("black lotus", "").mapOrAccumulate { search ->
+                    search.alsoLog { " Searching for $it" }
+                    api.cardNamedRaise(search)
+                }
+            },
+            recover = { it },
+        ).alsoLog()
     }
-}
-
-fun initKoin(): KoinApplication = startKoin {
-    modules(databaseModule, scryfallModule)
 }

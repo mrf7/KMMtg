@@ -1,13 +1,11 @@
 package client
 
 import arrow.core.Either
-import arrow.core.left
 import arrow.core.raise.Raise
+import arrow.core.raise.catch
 import arrow.core.raise.either
 import arrow.core.raise.withError
-import arrow.core.right
-import bind
-import co.touchlab.kermit.Logger
+import ensure
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
@@ -16,9 +14,12 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.encodedPath
 import io.ktor.http.isSuccess
 import io.ktor.http.takeFrom
+import io.ktor.serialization.ContentConvertException
 import models.CardDto
+import models.InvalidResponse
 import models.ListResp
 import models.ScryfallError
+import models.ScryfallErrorResponse
 import models.SetDto
 import raise
 
@@ -32,49 +33,37 @@ interface ScryfallApi : AutoCloseable {
     context(_: Raise<ScryfallError>)
     suspend fun setsRaise(): List<SetDto>
 
-    @Deprecated("Use raise variant", replaceWith = ReplaceWith("cardNamedRaise(name)"))
-    suspend fun cardNamed(name: String): Either<String, CardDto>
-
     @Deprecated("Use raise variant", replaceWith = ReplaceWith("searchCardRaise(searchParam)"))
     suspend fun searchCard(searchParam: String): Either<String, List<CardDto>>
-
-    @Deprecated("Use raise variant", replaceWith = ReplaceWith("setsRaise()"))
-    suspend fun sets(): Either<String, List<SetDto>>
-}
-
-suspend inline fun <reified T> HttpResponse.toEither(): Either<String, T> = when (this.status.value) {
-    in 200..299 -> this.body<T>().right()
-    else -> this.body<String>().left()
-}
-
-context(_: Raise<Throwable>)
-inline fun <T> catch(block: () -> T): T {
-    return Either.catch(block).bind()
 }
 
 class ScryfallApiImpl : ScryfallApi, AutoCloseable {
     private val client = newKtorClient()
 
-    // TODO handle exceptions/responses that dont fit ScryfallError
     context(_: Raise<ScryfallError>)
-    private suspend inline fun <reified T> HttpResponse.bodyOrError(): T {
-        return if (status.isSuccess()) {
-            body<T>()
-        } else {
-            raise(body<ScryfallError>())
+    private suspend inline fun <reified T> HttpResponse.responseBodyOrRaise(): T {
+        // make sure we got a successful response, otherwise raise an error
+        ensure(status.isSuccess()) {
+            bodyOrError<ScryfallErrorResponse>()
         }
+        return bodyOrError<T>()
     }
 
+    context(_: Raise<InvalidResponse>)
+    private suspend inline fun <reified T> HttpResponse.bodyOrError(): T =
+        catch({ body<T>() }) { t: ContentConvertException ->
+            raise(InvalidResponse(body<String>(), T::class.simpleName ?: "unknown class", t))
+        }
+
     /**
-     * Gets a single card object from the search or raises a [ScryfallError]
-     * If the error response doesnt fit [ScryfallError] throws an exception
+     * Gets a single card object from the search or raises a [ScryfallErrorResponse]
+     * If the error response doesnt fit [ScryfallErrorResponse] throws an exception
      */
-    context(_: Raise<ScryfallError>)
-    override suspend fun cardNamedRaise(name: String): CardDto {
+    context(_: Raise<ScryfallError>) override suspend fun cardNamedRaise(name: String): CardDto {
         return client.get {
             scryfall("$CardApiBase$FindNamed")
             parameter("fuzzy", name)
-        }.bodyOrError()
+        }.responseBodyOrRaise()
     }
 
 
@@ -84,34 +73,19 @@ class ScryfallApiImpl : ScryfallApi, AutoCloseable {
     }
 
     context(_: Raise<ScryfallError>)
-    override suspend fun searchCardRaise(searchParam: String): List<CardDto> = client.get {
-        scryfall("$CardApiBase$Search")
-        parameter("q", searchParam)
-    }.bodyOrError<ListResp<CardDto>>().data
+    override suspend fun searchCardRaise(searchParam: String): List<CardDto> =
+        client.get {
+            scryfall("$CardApiBase$Search")
+            parameter("q", searchParam)
+        }.responseBodyOrRaise<ListResp<CardDto>>().data
 
     context(_: Raise<ScryfallError>)
     override suspend fun setsRaise(): List<SetDto> =
-        client.get { scryfall("sets") }.bodyOrError<ListResp<SetDto>>().data
+        client.get { scryfall("sets") }.responseBodyOrRaise<ListResp<SetDto>>().data
 
     @Deprecated("Use raise variant", replaceWith = ReplaceWith("searchCardRaise(searchParam)"))
-    override suspend fun searchCard(searchParam: String): Either<String, List<CardDto>> {
-        val resp: HttpResponse = client.get {
-            scryfall("$CardApiBase$Search")
-            parameter("q", searchParam)
-        }
-
-        return resp
-            .toEither<ListResp<CardDto>>()
-            .onRight { if (it.hasMore) Logger.d("Scryfall") { "Search has more" } }
-            .map { it.data }
-    }
-
-    @Deprecated("Use raise variant", replaceWith = ReplaceWith("setsRaise()"))
-    override suspend fun sets(): Either<String, List<SetDto>> = either { withError({ it.details }) { setsRaise() } }
-
-    @Deprecated("Use raise variant", replaceWith = ReplaceWith("cardNamedRaise(name)"))
-    override suspend fun cardNamed(name: String): Either<String, CardDto> = either {
-        withError({ it.details }) { cardNamedRaise(name) }
+    override suspend fun searchCard(searchParam: String): Either<String, List<CardDto>> = either {
+        withError({ it.toString() }) { searchCardRaise(searchParam) }
     }
 
     companion object {

@@ -18,7 +18,7 @@ interface CollectionImporter {
 
 class CollectionImporterImpl(private val client: ScryfallApi) : CollectionImporter {
     override suspend fun parseCardCastle(fileName: String): Either<String, List<CardEntry>> = either {
-        val setMap = withError({ it.details }) { client.setsRaise() }
+        val setMap = withError({ it.toString() }) { client.setsRaise() }
             .associate { it.name to it.code }
 
         return@either Either.catch {
