@@ -31,7 +31,9 @@ interface ScryfallApi : AutoCloseable {
     suspend fun setsRaise(): List<SetDto>
 }
 
-class ScryfallApiImpl : ScryfallApi, AutoCloseable {
+class ScryfallApiImpl :
+    ScryfallApi,
+    AutoCloseable {
     private val client = newKtorClient()
 
     context(_: Raise<ScryfallError>)
@@ -44,22 +46,19 @@ class ScryfallApiImpl : ScryfallApi, AutoCloseable {
     }
 
     context(_: Raise<InvalidResponse>)
-    private suspend inline fun <reified T> HttpResponse.bodyOrError(): T =
-        catch({ body<T>() }) { t: ContentConvertException ->
-            raise(InvalidResponse(body<String>(), T::class.simpleName ?: "unknown class", t))
-        }
+    private suspend inline fun <reified T> HttpResponse.bodyOrError(): T = catch({ body<T>() }) { t: ContentConvertException ->
+        raise(InvalidResponse(body<String>(), T::class.simpleName ?: "unknown class", t))
+    }
 
     /**
      * Gets a single card object from the search or raises a [ScryfallErrorResponse]
      * If the error response doesnt fit [ScryfallErrorResponse] throws an exception
      */
-    context(_: Raise<ScryfallError>) override suspend fun cardNamedRaise(name: String): CardDto {
-        return client.get {
-            scryfall("$CardApiBase$FindNamed")
-            parameter("fuzzy", name)
-        }.responseBodyOrRaise()
-    }
-
+    context(_: Raise<ScryfallError>)
+    override suspend fun cardNamedRaise(name: String): CardDto = client.get {
+        scryfall("$CardApiBase$FindNamed")
+        parameter("fuzzy", name)
+    }.responseBodyOrRaise()
 
     // This NEEDS to be called or it will hold up the couroutine scope of suspend fun main
     override fun close() {
@@ -67,15 +66,13 @@ class ScryfallApiImpl : ScryfallApi, AutoCloseable {
     }
 
     context(_: Raise<ScryfallError>)
-    override suspend fun searchCardRaise(searchParam: String): List<CardDto> =
-        client.get {
-            scryfall("$CardApiBase$Search")
-            parameter("q", searchParam)
-        }.responseBodyOrRaise<ListResp<CardDto>>().data
+    override suspend fun searchCardRaise(searchParam: String): List<CardDto> = client.get {
+        scryfall("$CardApiBase$Search")
+        parameter("q", searchParam)
+    }.responseBodyOrRaise<ListResp<CardDto>>().data
 
     context(_: Raise<ScryfallError>)
-    override suspend fun setsRaise(): List<SetDto> =
-        client.get { scryfall("sets") }.responseBodyOrRaise<ListResp<SetDto>>().data
+    override suspend fun setsRaise(): List<SetDto> = client.get { scryfall("sets") }.responseBodyOrRaise<ListResp<SetDto>>().data
 
     companion object {
         const val ScryfallBaseUri: String = "https://api.scryfall.com"

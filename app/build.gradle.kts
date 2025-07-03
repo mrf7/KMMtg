@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.compose.runtime)
     alias(libs.plugins.compose.compiler)
+    id("org.jetbrains.compose.hot-reload") version "1.0.0-alpha10" // <- add this additionally
 }
 
 group = "com.mfriend"

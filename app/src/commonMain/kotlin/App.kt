@@ -9,8 +9,8 @@ import androidx.compose.runtime.setValue
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 expect val Platform: String
+
 @Composable
-@Preview
 fun App() {
     var text by remember { mutableStateOf("Hello, World!") }
 
@@ -21,4 +21,10 @@ fun App() {
             Text(text)
         }
     }
+}
+
+@Preview
+@Composable
+fun AppPreview() {
+    App()
 }
