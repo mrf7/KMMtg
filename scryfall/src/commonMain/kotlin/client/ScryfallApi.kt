@@ -2,23 +2,14 @@ package client
 
 import arrow.core.raise.Raise
 import arrow.core.raise.catch
-import ensure
-import io.ktor.client.call.body
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.encodedPath
-import io.ktor.http.isSuccess
-import io.ktor.http.takeFrom
-import io.ktor.serialization.ContentConvertException
-import models.CardDto
-import models.InvalidResponse
-import models.ListResp
-import models.ScryfallError
-import models.ScryfallErrorResponse
-import models.SetDto
-import raise
+import arrow.core.raise.context.ensure
+import arrow.core.raise.context.raise
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.serialization.*
+import models.*
 
 interface ScryfallApi : AutoCloseable {
     context(_: Raise<ScryfallError>)
